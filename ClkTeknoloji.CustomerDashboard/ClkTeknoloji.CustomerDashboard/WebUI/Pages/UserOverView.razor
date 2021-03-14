@@ -1,0 +1,30 @@
+﻿@page "/usersview"
+<h3>UserOverView</h3>
+@using ClkTeknoloji.Shared.DTOs
+@using ClkTeknoloji.Shared.Service.Users
+
+@foreach (var user in users)
+{
+    <div>@user.FirstName</div>
+    @foreach (var product in user?.Products)
+	{
+		 <div>@product?.Information</div>
+	}
+
+}
+
+
+
+@code {
+    [Inject] public HttpClient HttpClient { get; set; }
+
+    [Inject] public IUserService userService { get; set; }
+
+    public List<UserDto> users = new List<UserDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        users = (await userService.GetAllUsers()).ToList();
+    }
+}
