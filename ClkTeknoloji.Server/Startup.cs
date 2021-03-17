@@ -17,6 +17,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 namespace ClkTeknoloji.Server
 {
     public class Startup
@@ -32,15 +36,16 @@ namespace ClkTeknoloji.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-           
+
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseSqlServer(Configuration["ConnectionStrings:SqlConStr"].ToString(), o=> {
+                options.UseSqlServer(Configuration["ConnectionStrings:SqlConStr"].ToString(), o =>
+                {
                     o.MigrationsAssembly("ClkTeknoloji.Server.Data");
                 });
             });
 
-         //   services.ConfigureMapping();
+            //   services.ConfigureMapping();
             services.AddScoped<IUserService, UserService>();
 
             services.AddCors(options =>
@@ -53,6 +58,24 @@ namespace ClkTeknoloji.Server
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ClkTeknoloji.Server", Version = "v1" });
             });
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+             {
+                 options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                 {
+                     ValidateIssuer = true,
+                     ValidateAudience = true,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     ValidIssuer = Configuration["JwtIssuer"],
+                     ValidAudience = Configuration["JwtAudience"],
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
+                 };
+             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +92,7 @@ namespace ClkTeknoloji.Server
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseCors("Open");

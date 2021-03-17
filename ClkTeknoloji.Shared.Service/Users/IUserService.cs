@@ -10,5 +10,7 @@ namespace ClkTeknoloji.Shared.Service.Users
     {
         Task<IEnumerable<UserDto>> GetAllUsers();
 
+        Task<UserLoginResponse> UserLogin(UserLoginRequest userLoginRequest);
+
     }
 }

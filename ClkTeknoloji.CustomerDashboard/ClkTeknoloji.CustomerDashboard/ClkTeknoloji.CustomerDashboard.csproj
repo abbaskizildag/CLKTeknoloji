@@ -24,6 +24,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ClkTeknoloji.Shared.Service\ClkTeknoloji.Shared.Service.csproj" />
-    <ProjectReference Include="..\..\ClkTeknoloji.Shared\ClkTeknoloji.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="WebUI\Services\" />
   </ItemGroup>
 </Project>

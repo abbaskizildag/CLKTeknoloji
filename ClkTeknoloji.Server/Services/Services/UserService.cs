@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration;
 using AutoMapper.QueryableExtensions;
 using ClkTeknoloji.Server.Data.Context;
 using ClkTeknoloji.Server.Data.Models;
@@ -7,6 +6,7 @@ using ClkTeknoloji.Server.Services.Infasture;
 using ClkTeknoloji.Shared.DTOs;
 using ClkTeknoloji.Shared.Utilis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -23,12 +23,14 @@ namespace ClkTeknoloji.Server.Services.Services
 
         private readonly AppDbContext context;
         private readonly IMapper mapper;
+        private readonly IConfiguration configuration;
 
-        public UserService(AppDbContext Context, IMapper Mapper)
+        public UserService(AppDbContext Context, IMapper Mapper, IConfiguration Configuration)
         {
 
             context = Context;
             mapper = Mapper;
+            configuration = Configuration;
         }
         public async Task<UserDto> CreateUser(UserDto User)
         {
@@ -68,32 +70,31 @@ namespace ClkTeknoloji.Server.Services.Services
             return mapper.Map<UserDto>(user);
         }
 
-        public Task<UserLoginResponse> Login(UserLoginRequest userLoginRequest)
+        public async Task<UserLoginResponse> Login(UserLoginRequest userLoginRequest)
         {
-            ////veritabanı kullanıcı doğrulama işlemleri yapıldı.
-            //var encryptedPassword = PasswordEncrypter.Encrypt(userLoginRequest.Password);
-            //var dbUser = context.Users.Where(u => u.EMailAddress == userLoginRequest.EMail && u.Password == encryptedPassword).FirstOrDefault();
-            //if (dbUser == null) throw new Exception("Kullanıcı bulunamadı veya bilgiler yanlış");
+            //veritabanı kullanıcı doğrulama işlemleri yapıldı.
+            var encryptedPassword = PasswordEncrypter.Encrypt(userLoginRequest.Password);
+            var dbUser = context.Users.Where(u => u.EMailAddress == userLoginRequest.EMail && u.Password == encryptedPassword).FirstOrDefault();
+            if (dbUser == null) throw new Exception("Kullanıcı bulunamadı veya bilgiler yanlış");
 
-            //if (!dbUser.IsActive) throw new Exception("Kullanıcı Pasif Durumdadır");
+            if (!dbUser.IsActive) throw new Exception("Kullanıcı Pasif Durumdadır");
 
-            //UserLoginResponseDto result = new UserLoginResponseDto();
-            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
-            //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            //var expiry = DateTime.Now.AddDays(int.Parse(configuration["JwtExpiryInDays"].ToString()));
+            UserLoginResponse result = new UserLoginResponse();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSecurityKey"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expiry = DateTime.Now.AddDays(int.Parse(configuration["JwtExpiryInDays"].ToString()));
 
-            //var claims = new[] //claim içinde email bilgisi barınsın dedik sdece.
-            //{
-            //        new Claim(ClaimTypes.Email,userLoginRequest.EMail),
-            //        new Claim(ClaimTypes.Name, dbUser.FirstName + " "+dbUser.LastName),
-            //        new Claim(ClaimTypes.UserData, dbUser.Id.ToString())
-            //    };
+            var claims = new[] //claim içinde email bilgisi barınsın dedik sdece.
+            {
+                    new Claim(ClaimTypes.Email,userLoginRequest.EMail),
+                    new Claim(ClaimTypes.Name, dbUser.FirstName + " "+dbUser.LastName),
+                    new Claim(ClaimTypes.UserData, dbUser.Id.ToString())
+                };
 
-            //var token = new JwtSecurityToken(configuration["JwtIssuer"], configuration["JwtAudience"], claims, null, expiry, creds);
-            //result.ApiToken = new JwtSecurityTokenHandler().WriteToken(token); //burada token'ı görünen şekilde uzun stringe dönüştürüyor
-            //result.User = mapper.Map<UserDto>(dbUser);
-            //return result;
-            return null;
+            var token = new JwtSecurityToken(configuration["JwtIssuer"], configuration["JwtAudience"], claims, null, expiry, creds);
+            result.ApiToken = new JwtSecurityTokenHandler().WriteToken(token); //burada token'ı görünen şekilde uzun stringe dönüştürüyor
+            result.User = mapper.Map<UserDto>(dbUser);
+            return result;
         }
 
         public async Task<UserDto> UpdateUser(UserDto User)

@@ -37,5 +37,21 @@ namespace ClkTeknoloji.Shared.Service.Users
           //  return await _httpClient.GetFromJsonAsync<IEnumerable<UserDto>>("api/user/users");
 
         }
+
+        public async Task<UserLoginResponse> UserLogin(UserLoginRequest userLoginRequest)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/user/login", userLoginRequest);
+
+            var resultString = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<UserLoginResponse>(resultString);
+
+            if (result==null)
+            {
+              // throw result.Error;
+            }
+
+            return result;
+        }
     }
 }
