@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ClkTeknoloji.Shared.BPResponse;
 using System.Net.Http.Json;
+using ClkTeknoloji.Shared.ResponseModels;
 
 namespace ClkTeknoloji.Shared.Service.Users
 {
@@ -25,14 +26,14 @@ namespace ClkTeknoloji.Shared.Service.Users
 
             var resultString = await response.Content.ReadAsStringAsync();
 
-            var result = JsonConvert.DeserializeObject<List<UserDto>>(resultString);
+            var result = JsonConvert.DeserializeObject<ServiceResponse<List<UserDto>>>(resultString);
 
-            if (result == null)
+            if (!result.Success)
             {
 
             }
 
-            return result;
+            return result.Value;
 
           //  return await _httpClient.GetFromJsonAsync<IEnumerable<UserDto>>("api/user/users");
 

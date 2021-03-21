@@ -181,3 +181,78 @@ app {
         display: block;
     }
 }
+
+.login-page-container {
+    margin: 50px 50px 50px 30px;
+}
+
+.login-text {
+    color: #495057;
+    text-decoration: none;
+    background-color: transparent;
+    font-size: 1.7rem;
+    font-family: inherit;
+}
+
+    .login-text:link {
+        color: #495057;
+        text-decoration: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+    .login-text:hover {
+        color: #495057;
+        text-decoration: none;
+        background-color: transparent;
+    }
+
+.login-box {
+    width: 400px;
+    padding: 10px 30px 20px 30px;
+    display: block;
+    background-color: white;
+    margin: 20px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 20px 2px #dbdbdb;
+    border: 1px solid #c9c9c9;
+}
+
+.login-label {
+    font-size: 1.4rem;
+    font-family: inherit;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #495057;
+}
+
+.icons-box {
+    background-color: white;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.check-remember-me {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.login-btn {
+    margin: 0px;
+}
+
+.forgot-password {
+    font-weight: 600;
+    font-size: 12px;
+    font-family: inherit;
+    margin-top: 20px;
+    color: #7d8791;
+    cursor: pointer;
+}
+
+.img-container {
+    margin-bottom: 10px;
+}

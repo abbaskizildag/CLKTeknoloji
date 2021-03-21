@@ -14,6 +14,7 @@ using ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ClkTeknoloji.CustomerDashboard.WebUI.Server.Hubs;
 
 namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
 {
@@ -30,6 +31,8 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+
             services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<AppDbContext>(options =>
@@ -67,15 +70,23 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
                 };
             });
 
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -103,6 +114,8 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chathub");
+
                 endpoints.MapFallbackToFile("index.html");
             });
         }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClkTeknoloji.Shared.ResponseModels;
 
 namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Controllers
 {
@@ -29,10 +30,14 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Controllers
         }
 
         [HttpGet("Users")]
-        public async Task<List<UserDto>> GetUsers()
+        public async Task<ServiceResponse<List<UserDto>>> GetUsers()
         {
-            return await userService.GetUser();
+            return new ServiceResponse<List<UserDto>>
+            {
+                Value = await userService.GetUser()
+            };
         }
+        
         [HttpPost("Create")]
         public async Task<UserDto> CreateUser([FromBody] UserDto User)
         {

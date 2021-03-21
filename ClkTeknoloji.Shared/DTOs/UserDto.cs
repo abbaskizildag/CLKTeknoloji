@@ -14,5 +14,8 @@ namespace ClkTeknoloji.Shared.DTOs
         public bool IsActive { get; set; }
         public string Password { get; set; }
         public List<ProductDto> Products { get; set; }
+
+        public string FullName => $"{FirstName} {LastName}";
+
     }
 }
