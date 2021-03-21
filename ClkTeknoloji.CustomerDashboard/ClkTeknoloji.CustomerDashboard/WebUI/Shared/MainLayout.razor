@@ -6,10 +6,35 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <a href="https://blazor.net" target="_blank" class="ml-md-auto">About</a>
+        <a href="https://blazor.net" target="_blank" class="ml-md-auto">@loginStr</a>
     </div>
 
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+@code {
+
+    [CascadingParameter] public Task<AuthenticationState> AuthState { get; set; }
+
+    [Inject] ILocalStorageService localStorageService { get; set; }
+
+    [Inject] NavigationManager navigationManager { get; set; }
+
+    private string loginStr = "About";
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthState;
+        if (authState.User.Identity.IsAuthenticated) //authentice edilmiþsse
+        {
+            //authState.User.Claims.FirstOrDefault(i => i.ValueType == ClaimTypes.Email);
+            loginStr = await localStorageService.GetItemAsStringAsync("email");
+        }
+        else
+        {
+            navigationManager.NavigateTo("/login");
+        }
+    }
+}

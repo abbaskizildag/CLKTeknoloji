@@ -1,6 +1,8 @@
 using Blazored.LocalStorage;
 using Blazored.Modal;
+using ClkTeknoloji.CustomerDashboard.Utilis;
 using ClkTeknoloji.Shared.Service.Users;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +28,10 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Client
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton(sp => new CounterState());
+            builder.Services.AddAuthorizationCore();
+
+            builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
+
             await builder.Build().RunAsync();
         }
     }

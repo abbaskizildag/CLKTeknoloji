@@ -103,6 +103,9 @@
 
     [Inject] ILocalStorageService localStorageService { get; set; }
 
+    [Inject] AuthenticationStateProvider authenticationStateProvider { get; set; }
+
+
     private UserLoginRequest userLoginRequest = new UserLoginRequest();
 
     private async Task LoginProcess()
@@ -117,11 +120,11 @@
                 await localStorageService.SetItemAsync("email", userResponse.User.EMailAddress);
                 await localStorageService.SetItemAsync("UserId", userResponse.User.Id.ToString());
                 await localStorageService.SetItemAsync("UserFullName", userResponse.User.FullName);
-                navManager.NavigateTo("/");
-               // (authenticationStateProvider as AuthStateProvider).NotifyUserLogin(res.Value.User.EMailAddress); //bir kullanıcı giriş yaptı bundan kullanıcı oluşturacak isteğim yerde kullanabileceğiz.
 
-                //    //httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", res.Value.ApiToken);
-                //    navManager.NavigateTo("/");
+                (authenticationStateProvider as AuthStateProvider).NotifyUserLogin(userResponse.User.EMailAddress); //bir kullanıcı giriş yaptı bundan kullanıcı oluşturacak isteğim yerde kullanabileceğiz.
+
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", userResponse.ApiToken);
+                navManager.NavigateTo("/");
                 //}
                 //else
                 //{
