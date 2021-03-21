@@ -24,9 +24,12 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Controllers
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<UserLoginResponse> Login(UserLoginRequest userLoginRequest)
+        public async Task<ServiceResponse<UserLoginResponse>> Login(UserLoginRequest userLoginRequest)
         {
-            return await userService.Login(userLoginRequest);
+            return new ServiceResponse<UserLoginResponse>()
+            {
+                Value = await userService.Login(userLoginRequest)
+            };
         }
 
         [HttpGet("Users")]
@@ -37,26 +40,39 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Controllers
                 Value = await userService.GetUser()
             };
         }
-        
+
         [HttpPost("Create")]
-        public async Task<UserDto> CreateUser([FromBody] UserDto User)
+        public async Task<ServiceResponse<UserDto>> CreateUser([FromBody] UserDto User)
         {
-            return await userService.CreateUser(User);
+            return new ServiceResponse<UserDto>
+            {
+                Value = await userService.CreateUser(User)
+            };
         }
         [HttpPost("Update")]
-        public async Task<UserDto> UpdateUser([FromBody] UserDto User)
+        public async Task<ServiceResponse<UserDto>> UpdateUser([FromBody] UserDto User)
         {
-            return await userService.UpdateUser(User);
+            return new ServiceResponse<UserDto>
+            {
+                Value = await userService.UpdateUser(User)
+            };
         }
+
         [HttpGet("UserById/{Id}")]
-        public async Task<UserDto> GetUserById(int Id)
+        public async Task<ServiceResponse<UserDto>> GetUserById(int Id)
         {
-            return await userService.GetUserById(Id);
+            return new ServiceResponse<UserDto>
+            {
+                Value = await userService.GetUserById(Id)
+            };
         }
         [HttpPost("Delete")]
-        public async Task<bool> DeleteUser([FromBody] int Id)
+        public async Task<ServiceResponse<bool>> DeleteUser([FromBody] int Id)
         {
-            return await userService.DeleteUserById(Id);
+            return new ServiceResponse<bool>
+            {
+                Value = await userService.DeleteUserById(Id)
+            };
         }
     }
 }

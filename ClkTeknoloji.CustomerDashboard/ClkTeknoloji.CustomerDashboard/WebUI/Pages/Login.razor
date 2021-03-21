@@ -101,26 +101,24 @@
 
     [Inject] IUserService userSerivce { get; set; }
 
+    [Inject] ILocalStorageService localStorageService { get; set; }
+
     private UserLoginRequest userLoginRequest = new UserLoginRequest();
 
     private async Task LoginProcess()
     {
-        var httpResponse = await userSerivce.UserLogin(userLoginRequest);
+        var userResponse = await userSerivce.UserLogin(userLoginRequest);
 
-        if (httpResponse.User != null)
+        if (userResponse.User != null)
         {
             try
             {
+                await localStorageService.SetItemAsync("token", userResponse.ApiToken);
+                await localStorageService.SetItemAsync("email", userResponse.User.EMailAddress);
+                await localStorageService.SetItemAsync("UserId", userResponse.User.Id.ToString());
+                await localStorageService.SetItemAsync("UserFullName", userResponse.User.FullName);
                 navManager.NavigateTo("/");
-                //   var res = await httpResponse.Content.ReadFromJsonAsync<ServiceResponse<UserLoginResponseDTO>>();
-
-                //if (res.Success)
-                //{
-                //    //await localStorageService.SetItemAsync("token", res.Value.ApiToken);
-                //    //await localStorageService.SetItemAsync("email", res.Value.User.EMailAddress);
-                //    //await localStorageService.SetItemAsync("UserId", res.Value.User.Id.ToString());
-                //    //await localStorageService.SetItemAsync("UserFullName", res.Value.User.FullName);
-                //    //(authenticationStateProvider as AuthStateProvider).NotifyUserLogin(res.Value.User.EMailAddress); //bir kullanıcı giriş yaptı bundan kullanıcı oluşturacak isteğim yerde kullanabileceğiz.
+               // (authenticationStateProvider as AuthStateProvider).NotifyUserLogin(res.Value.User.EMailAddress); //bir kullanıcı giriş yaptı bundan kullanıcı oluşturacak isteğim yerde kullanabileceğiz.
 
                 //    //httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", res.Value.ApiToken);
                 //    navManager.NavigateTo("/");
@@ -129,6 +127,8 @@
                 //{
                 //    //await modalManager.ShowMessageAsync("Login Error", res.Message);
                 //}
+
+
             }
             catch (Exception ex)
             {

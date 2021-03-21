@@ -1,20 +1,19 @@
+using Blazored.LocalStorage;
+using ClkTeknoloji.CustomerDashboard.WebUI.Server.Hubs;
+using ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Infasture;
+using ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services;
+using ClkTeknoloji.Server.Data.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
-using AutoMapper;
-using ClkTeknoloji.Server.Data.Context;
-using Microsoft.EntityFrameworkCore;
-using ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Infasture;
-using ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 using System.Text;
-using ClkTeknoloji.CustomerDashboard.WebUI.Server.Hubs;
 
 namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
 {
@@ -79,6 +78,7 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
+            services.AddBlazoredLocalStorage();
 
         }
 

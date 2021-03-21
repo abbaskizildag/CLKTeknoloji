@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClkTeknoloji.Server.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210313184905_Initial")]
-    partial class Initial
+    [Migration("20210321100027_Initialized")]
+    partial class Initialized
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,9 +43,6 @@ namespace ClkTeknoloji.Server.Data.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
@@ -64,7 +61,7 @@ namespace ClkTeknoloji.Server.Data.Migrations
                     b.Property<int>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ExpireDate")
@@ -142,9 +139,7 @@ namespace ClkTeknoloji.Server.Data.Migrations
 
                     b.HasOne("ClkTeknoloji.Server.Data.Models.Customer", "Customer")
                         .WithMany("Products")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.Navigation("CreatedUser");
 

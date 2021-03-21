@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace ClkTeknoloji.Server.Data.Models
@@ -15,11 +16,9 @@ namespace ClkTeknoloji.Server.Data.Models
         public string Statu { get; set; }
         public decimal Price { get; set; }
         public DateTime ExpireDate { get; set; }
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public virtual User CreatedUser { get; set; }
         public virtual Customer Customer { get; set; }
-
-
 
     }
 }

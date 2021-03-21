@@ -42,17 +42,17 @@ namespace ClkTeknoloji.Shared.Service.Users
         public async Task<UserLoginResponse> UserLogin(UserLoginRequest userLoginRequest)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/login", userLoginRequest);
-
+ 
             var resultString = await response.Content.ReadAsStringAsync();
 
-            var result = JsonConvert.DeserializeObject<UserLoginResponse>(resultString);
+            var result = JsonConvert.DeserializeObject<ServiceResponse<UserLoginResponse>>(resultString);
 
-            if (result==null)
+            if (!result.Success)
             {
-              // throw result.Error;
+               throw new Exception(result.Message);
             }
 
-            return result;
+            return result.Value;
         }
     }
 }
