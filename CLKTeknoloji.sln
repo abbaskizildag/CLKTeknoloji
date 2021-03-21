@@ -17,9 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClkTeknoloji.Shared.Service
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClkTeknoloji.Shared", "ClkTeknoloji.Shared\ClkTeknoloji.Shared.csproj", "{99DFDCFA-4DBF-43FA-9454-C3123E6B8D48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClkTeknoloji.CustomerDashboard.WebUI.Server", "ClkTeknoloji.CustomerDashboard\ClkTeknoloji.CustomerDashboard.WebUI\Server\ClkTeknoloji.CustomerDashboard.WebUI.Server.csproj", "{9CC3B955-4CAA-4BA6-AA6F-B0865F8A3938}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClkTeknoloji.CustomerDashboard.WebUI.Server", "ClkTeknoloji.CustomerDashboard\ClkTeknoloji.CustomerDashboard.WebUI\Server\ClkTeknoloji.CustomerDashboard.WebUI.Server.csproj", "{9CC3B955-4CAA-4BA6-AA6F-B0865F8A3938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClkTeknoloji.CustomerDashboard.WebUI.Client", "ClkTeknoloji.CustomerDashboard\ClkTeknoloji.CustomerDashboard.WebUI\Client\ClkTeknoloji.CustomerDashboard.WebUI.Client.csproj", "{AB6B4672-97B4-42D3-A477-FE8D4BE6412F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClkTeknoloji.CustomerDashboard.WebUI.Client", "ClkTeknoloji.CustomerDashboard\ClkTeknoloji.CustomerDashboard.WebUI\Client\ClkTeknoloji.CustomerDashboard.WebUI.Client.csproj", "{AB6B4672-97B4-42D3-A477-FE8D4BE6412F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
