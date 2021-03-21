@@ -1,0 +1,128 @@
+﻿@page "/users/add"
+@page "/users/edit/{UserId:int}"
+
+<h3>@pageTitle</h3>
+<EditForm Model="@userModel" OnValidSubmit="editOrUpdate">
+    <DataAnnotationsValidator />
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>First Name</label>
+            <InputText @bind-Value="@userModel.FirstName" class="form-control" />
+            <ValidationMessage For="@(()=>userModel.FirstName)" />
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Last Name</label>
+            <InputText @bind-Value="@userModel.LastName" class="form-control" />
+            <ValidationMessage For="@(()=>userModel.LastName)" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>E-Mail Address</label>
+            <InputText @bind-Value="@userModel.EMailAddress" class="form-control" />
+            <ValidationMessage For="@(()=>userModel.EMailAddress)" />
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Password</label>
+            <InputText @bind-Value="@userModel.Password" class="form-control" type="password" />
+            <ValidationMessage For="@(()=>userModel.Password)" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <div class="form-check">
+                <InputCheckbox @bind-Value="@userModel.IsActive" class="form-check-input" id="chUserStatus" />
+                <label for="chUserStatus" class="form-check-label">User Status</label>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="form-group">
+        @*<SaveButtonComponent Caption="Save"></SaveButtonComponent>
+        <CancelButtonComponent OnClick="goBackUserList"> </CancelButtonComponent>*@
+        <button class="btn btn-primary">Kaydet</button>
+        <button class="btn btn-secondary" @onclick="goUserListPage">Listeye Geri Dön</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public int UserId { get; set; }
+
+    [Inject] HttpClient httpClient { get; set; }
+
+    [Inject] public IUserService userService { get; set; }
+
+    [Inject] NavigationManager navigationManager { get; set; }
+
+    private UserDto userModel = new UserDto();
+
+    //[Inject] public ModalManager ModalManager { get; set; }
+
+    private string pageTitle = "Create User";
+
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    void goBackUserList()
+    {
+        NavigationManager.NavigateTo("/userlist");
+    }
+
+    async Task editOrUpdate()
+    {
+        try
+        {
+            if (UserId > 0)
+            {
+                await userService.UpdateUser(userModel);
+
+                pageTitle = "Edit User";
+            }
+            else
+            {
+                pageTitle = "Create User";
+
+                await userService.CreateUser(userModel);
+
+            }
+            goUserListPage();
+        }
+        catch (Exception ex)
+        {
+
+            //await ModalManager.ShowMessageAsync("Api Exception", ex.Message);
+        }
+        //catch (Exception ex)
+        //{
+
+        //    //await ModalManager.ShowMessageAsync("Exception", ex.Message);
+        //}
+
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserId > 0)
+        {
+            try
+            {
+                pageTitle = "Edit User";
+                userModel = await userService.GetUserById(UserId);
+            }
+            catch (Exception ex)
+            {
+                // await ModalManager.ShowMessageAsync("Api Exception", ex.Message);
+            }
+
+        }
+    }
+
+    protected void goUserListPage()
+    {
+        navigationManager.NavigateTo("/userslist");
+    }
+}

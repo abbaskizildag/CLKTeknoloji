@@ -9,10 +9,9 @@ namespace ClkTeknoloji.Shared.DTOs
     {
 
         [Required(ErrorMessage = "Bu alan zorunludur.")]
-
         public string EMail { get; set; }
-        [Required(ErrorMessage = "Bu alan zorunludur.")]
 
+        [Required(ErrorMessage = "Bu alan zorunludur.")]
         public string Password { get; set; }
     }
 }

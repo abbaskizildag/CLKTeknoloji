@@ -20,6 +20,38 @@ namespace ClkTeknoloji.Shared.Service.Users
             _httpClient = httpClient;
         }
 
+        public async Task<UserDto> CreateUser(UserDto User)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/user/create", User);
+
+            var resultString = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<ServiceResponse<UserDto>>(resultString);
+
+            if (!result.Success)
+            {
+                throw new Exception(result.Message);
+            }
+
+            return result.Value;
+        }
+
+        public async Task<bool> DeleteUserById(int Id)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/user/delete", Id);
+
+            var resultString = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<ServiceResponse<bool>>(resultString);
+
+            if (!result.Success)
+            {
+                throw new Exception(result.Message);
+            }
+
+            return result.Value;
+        }
+
         public async Task<IEnumerable<UserDto>> GetAllUsers()
         {
             var response = await _httpClient.GetAsync("api/user/users");
@@ -34,9 +66,38 @@ namespace ClkTeknoloji.Shared.Service.Users
             }
 
             return result.Value;
+        }
 
-          //  return await _httpClient.GetFromJsonAsync<IEnumerable<UserDto>>("api/user/users");
+        public async Task<UserDto> GetUserById(int Id)
+        {
+            var response = await _httpClient.GetAsync($"api/user/UserById/{Id}");
 
+            var resultString = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<ServiceResponse<UserDto>>(resultString);
+
+            if (!result.Success)
+            {
+
+            }
+
+            return result.Value;
+        }
+
+        public async Task<UserDto> UpdateUser(UserDto User)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/user/update", User);
+
+            var resultString = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<ServiceResponse<UserDto>>(resultString);
+
+            if (!result.Success)
+            {
+                throw new Exception(result.Message);
+            }
+
+            return result.Value;
         }
 
         public async Task<UserLoginResponse> UserLogin(UserLoginRequest userLoginRequest)

@@ -1,56 +1,93 @@
 ﻿@page "/userslist"
 
-        <h3>UserList</h3>
+<h3>UserList</h3>
 
-        <div class="btn-group">
-            <div class="container">
-                <button class="btn btn-primary" onclick="">Yeni Personel Oluştur</button>
-            </div>
-        </div>
-
-        @if (usersList != null)
-        {
-            <table class="table table-hover table-sm">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Adı Soyadı</th>
-                        <th scope="col">E-Mail Adres</th>
-                        <th scope="col">Oluşturulma Tarihi</th>
-                        <th scope="col">Durum</th>
-                        <th scope="col">#</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in usersList)
-                    {
-                        string spanClass = "badge badge-pill badge-" + (user.IsActive ? "success" : "danger");
-                        <tr>
-                            <td>@user.Id</td>
-                            <td>@user.FullName</td>
-                            <td>@user.EMailAddress</td>
-                            <td>@user.CreateDate</td>
-                            <td><span class="@spanClass">@(user.IsActive?"Active":"Passive")</span></td>
-                            <td>
-                               <button class="btn btn-danger">Sil</button>
-                                <button class="btn btn-success">Güncelle</button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
+<div class="btn-group">
+    <div class="container">
+        <button class="btn btn-primary" @onclick="goCreateUserPage">Yeni Personel Oluştur</button>
+    </div>
+</div>
+<br />
+@if (usersList != null)
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Adı Soyadı</th>
+                <th scope="col">E-Mail Adres</th>
+                <th scope="col">Oluşturulma Tarihi</th>
+                <th scope="col">Durum</th>
+                <th scope="col">#</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in usersList)
+            {
+                string spanClass = "badge badge-pill badge-" + (user.IsActive ? "success" : "danger");
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.FullName</td>
+                    <td>@user.EMailAddress</td>
+                    <td>@user.CreateDate</td>
+                    <td><span class="@spanClass">@(user.IsActive?"Active":"Passive")</span></td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="@(()=>DeleteUser(user.Id))">Sil</button>
+                        <button class="btn btn-success" @onclick="(() => goUpdatePage(user.Id))">Güncelle</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
     [Inject] public HttpClient HttpClient { get; set; }
 
     [Inject] public IUserService userService { get; set; }
 
+    [Inject] NavigationManager navigationManager { get; set; }
+
     public List<UserDto> usersList = new List<UserDto>();
 
     protected override async Task OnInitializedAsync()
     {
-
+       await LoadList();
+    }
+    protected void goCreateUserPage()
+    {
+        navigationManager.NavigateTo("/users/add");
+    }
+    protected void goUpdatePage(int userId)
+    {
+        navigationManager.NavigateTo($"/users/edit/{userId}");
+    }
+    protected async Task LoadList()
+    {
         usersList = (await userService.GetAllUsers()).ToList();
+
+    }
+    protected async Task DeleteUser(int Id)
+    {
+
+        await userService.DeleteUserById(Id);
+        await LoadList();
+
+        //bool confirmed = await modalManager.ConfirmationAsync("Confirmation", "User will be deleted. Are you sure?");
+        //if (!confirmed) return;
+        //try
+        //{
+        //    bool deleted = await httpClient.PostGetServiceResponseAsync<bool, Guid>("api/user/delete", Id, true);
+
+        //    await LoadList();
+        //}
+        //catch (ApiException ex)
+        //{
+        //    await modalManager.ShowMessageAsync("User Deletion Errror", ex.Message);
+        //}
+        //catch (Exception ex)
+        //{
+        //    await modalManager.ShowMessageAsync("An Deletion Errror", ex.Message);
+        //}
     }
 }

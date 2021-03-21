@@ -6,7 +6,7 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <a href="https://blazor.net" target="_blank" class="ml-md-auto">@loginStr</a>
+        Hoş Geldin <a href="/" class="ml-md-auto">@loginStr</a>
     </div>
 
     <div class="content px-4">
@@ -27,7 +27,7 @@
     protected async override Task OnInitializedAsync()
     {
         var authState = await AuthState;
-        if (authState.User.Identity.IsAuthenticated) //authentice edilmi�sse
+        if (authState.User.Identity.IsAuthenticated) //authentice edilmişsse
         {
             //authState.User.Claims.FirstOrDefault(i => i.ValueType == ClaimTypes.Email);
             loginStr = await localStorageService.GetItemAsStringAsync("email");

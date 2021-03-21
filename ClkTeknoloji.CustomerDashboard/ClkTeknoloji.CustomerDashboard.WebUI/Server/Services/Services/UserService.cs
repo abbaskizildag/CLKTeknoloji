@@ -37,6 +37,7 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
                 throw new Exception("İlgili kayıt zaten mevcut");
             }
             User.Password = PasswordEncrypter.Encrypt(User.Password);
+            User.CreateDate = DateTime.Now;
             dbUser = mapper.Map<ClkTeknoloji.Server.Data.Models.User>(User);
             await context.Users.AddAsync(dbUser);
             await context.SaveChangesAsync();
