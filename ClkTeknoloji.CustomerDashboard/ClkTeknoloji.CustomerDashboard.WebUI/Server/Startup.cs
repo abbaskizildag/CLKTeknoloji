@@ -46,6 +46,8 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
 
             services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<IProductService, ProductService>();
+
             services.AddCors(options =>
             {
                 options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());

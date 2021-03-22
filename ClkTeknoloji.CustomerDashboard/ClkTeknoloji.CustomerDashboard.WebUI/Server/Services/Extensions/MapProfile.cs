@@ -20,6 +20,9 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Extensions
 
             CreateMap<Customer, CustomerDto>();
             CreateMap<CustomerDto, Customer>();
+
+            CreateMap<Service, ServiceDto>();
+            CreateMap<ServiceDto, Service>();
         }
     }
 }

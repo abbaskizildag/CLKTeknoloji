@@ -1,0 +1,148 @@
+﻿@page "/products/add"
+@page "/products/edit/{ProductId:int}"
+
+<h3>@pageTitle</h3>
+<EditForm Model="@productModel" OnValidSubmit="editOrUpdate">
+    <DataAnnotationsValidator />
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>CreateUser Id</label>
+            <InputNumber @bind-Value="@productModel.CreatedUserId" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.CreatedUserId)" />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Müşteri No(Sayısal)</label>
+            <InputNumber @bind-Value="@productModel.CustomerId" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.CustomerId)" />
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Tipi(Bilgisayar Telefon)</label>
+            <InputText @bind-Value="@productModel.Type" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.Type)" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Arıza Bilgisi</label>
+            <InputText @bind-Value="@productModel.Information" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.Information)" />
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Alınan Parçalar</label>
+            <InputText @bind-Value="@productModel.PartOfProduct" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.PartOfProduct)" />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Fiyat</label>
+            <InputNumber @bind-Value="@productModel.Price" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.Price)" />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Statü</label>
+            <InputText @bind-Value="@productModel.Statu" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.Statu)" />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Servis</label>
+            <InputNumber @bind-Value="@productModel.ServiceId" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.ServiceId)" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @*<div class="form-check">
+                <InputCheckbox @bind-Value="@userModel.IsActive" class="form-check-input" id="chUserStatus" />
+                <label for="chUserStatus" class="form-check-label">User Status</label>
+            </div>*@
+
+
+        </div>
+    </div>
+    <div class="form-group">
+        @*<SaveButtonComponent Caption="Save"></SaveButtonComponent>
+            <CancelButtonComponent OnClick="goBackUserList"> </CancelButtonComponent>*@
+        <button class="btn btn-primary">Kaydet</button>
+        <button class="btn btn-secondary" @onclick="goUserListPage">Listeye Geri Dön</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public int ProductId { get; set; }
+
+    [Inject] HttpClient httpClient { get; set; }
+
+    [Inject] public IProductService productService { get; set; }
+
+    [Inject] NavigationManager navigationManager { get; set; }
+
+    private ProductDto productModel = new ProductDto();
+
+    //[Inject] public ModalManager ModalManager { get; set; }
+
+    private string pageTitle = "Create Product";
+
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    void goBackUserList()
+    {
+        NavigationManager.NavigateTo("/productlist");
+    }
+
+    async Task editOrUpdate()
+    {
+        try
+        {
+            if (ProductId > 0)
+            {
+                await productService.UpdateProduct(productModel);
+
+                pageTitle = "Edit User";
+            }
+            else
+            {
+                pageTitle = "Create User";
+
+                await productService.CreateProduct(productModel);
+
+            }
+            goUserListPage();
+        }
+        catch (Exception ex)
+        {
+
+            //await ModalManager.ShowMessageAsync("Api Exception", ex.Message);
+        }
+        //catch (Exception ex)
+        //{
+
+        //    //await ModalManager.ShowMessageAsync("Exception", ex.Message);
+        //}
+
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ProductId > 0)
+        {
+            try
+            {
+                pageTitle = "Edit User";
+                productModel = await productService.GetProductById(ProductId);
+            }
+            catch (Exception ex)
+            {
+                // await ModalManager.ShowMessageAsync("Api Exception", ex.Message);
+            }
+
+        }
+    }
+
+    protected void goUserListPage()
+    {
+        navigationManager.NavigateTo("/productslist");
+    }
+}

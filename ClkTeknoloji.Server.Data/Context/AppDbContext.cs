@@ -16,13 +16,13 @@ namespace ClkTeknoloji.Server.Data.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Customers { get; set; }
-
+        public DbSet<Service> Services { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerConfiguration());
-
+            modelBuilder.ApplyConfiguration(new ServiceConfiguration());
         }
     }
 }

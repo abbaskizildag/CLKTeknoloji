@@ -1,0 +1,86 @@
+﻿@page "/productslist"
+
+<h3>UserList</h3>
+
+<div class="btn-group">
+    <div class="container">
+        <button class="btn btn-primary" @onclick="goCreateUserPage">Yeni Personel Oluştur</button>
+    </div>
+</div>
+<br />
+@if (productsList != null)
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Ekleyen Personel</th>
+                <th scope="col">Müşteri Id</th>
+                <th scope="col">Servis Id</th>
+                <th scope="col">Durum</th>
+                <th scope="col">Tipi</th>
+                <th scope="col">Bilgi</th>
+                <th scope="col">Alınan Parçalar</th>
+                <th scope="col">Fiyat</th>
+
+                <th scope="col">#</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in productsList)
+            {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.CreatedUserId</td>
+                <td>@user.Customer.FirstName</td>
+                <td>@user.Service.Name</td>
+                <td>@user.Statu</td>
+                <td>@user.Type</td>
+                <td>@user.Information</td>
+                <td>@user.PartOfProduct</td>
+                <td>@user.Price</td>
+
+                @*<td><span class="@spanClass">@(user.IsActive?"Active":"Passive")</span></td>*@
+                <td>
+                    <button class="btn btn-danger" @onclick="@(()=>DeleteUser(user.Id))">Sil</button>
+                    <button class="btn btn-success" @onclick="(() => goUpdatePage(user.Id))">Güncelle</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Inject] public HttpClient HttpClient { get; set; }
+
+    [Inject] public IProductService productService { get; set; }
+
+    [Inject] NavigationManager navigationManager { get; set; }
+
+    public List<ProductDto> productsList = new List<ProductDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadList();
+    }
+    protected void goCreateUserPage()
+    {
+        navigationManager.NavigateTo("/products/add");
+    }
+    protected void goUpdatePage(int productId)
+    {
+        navigationManager.NavigateTo($"/products/edit/{productId}");
+    }
+    protected async Task LoadList()
+    {
+        productsList = (await productService.GetAllProduct()).ToList();
+
+    }
+    protected async Task DeleteUser(int Id)
+    {
+
+        await productService.DeleteProductById(Id);
+        await LoadList();
+    }
+}

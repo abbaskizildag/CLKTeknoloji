@@ -22,7 +22,6 @@ namespace ClkTeknoloji.Shared.DTOs
         [Required(ErrorMessage = "Bu alan zorunludur.")]
 
         public string Password { get; set; }
-        public List<ProductDto> Products { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
 
