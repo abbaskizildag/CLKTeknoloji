@@ -45,8 +45,8 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
             //   services.ConfigureMapping();
 
             services.AddScoped<IUserService, UserService>();
-
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICustomerService, CustomerService>();
 
             services.AddCors(options =>
             {

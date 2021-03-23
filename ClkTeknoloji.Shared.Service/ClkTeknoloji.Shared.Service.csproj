@@ -13,8 +13,4 @@
     <ProjectReference Include="..\ClkTeknoloji.Shared\ClkTeknoloji.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Customers\" />
-  </ItemGroup>
-
 </Project>

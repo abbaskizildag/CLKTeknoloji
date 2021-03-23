@@ -18,53 +18,58 @@
         <h4 class="login-label">Login Ekranı</h4>
         <EditForm Model="userLoginRequest" OnValidSubmit="@( () => LoginProcess())" autocomplete="off">
             <DataAnnotationsValidator />
-            <div class="form-group">
-                <div class="input-group">
-                    <InputText @bind-Value="userLoginRequest.EMail" type="text"
-                               class="form-control"
-                               placeholder="Email Adresiniz"
-                               maxlength="256" />
-                    <div class="input-group-append">
-                        <div class="input-group-text icons-box">
-                            <span class="material-icons">person</span>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <InputText @bind-Value="userLoginRequest.EMail" type="text"
+                                       class="form-control"
+                                       placeholder="Email Adresiniz"
+                                       maxlength="256" />
+                            <div class="input-group-append">
+                                <div class="input-group-text icons-box">
+                                    <span class="material-icons">person</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="validation-message">
+                            <ValidationMessage For="@(()=> userLoginRequest.EMail)" />
                         </div>
                     </div>
-                </div>
-                <div class="validation-message">
-                    <ValidationMessage For="@(()=> userLoginRequest.EMail)" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <InputText @bind-Value="userLoginRequest.Password" type="password"
-                               class="form-control"
-                               placeholder="Şifreniz"
-                               maxlength="32" />
-                    <div class="input-group-append">
-                        <div class="input-group-text icons-box">
-                            <span class="material-icons">lock</span>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <InputText @bind-Value="userLoginRequest.Password" type="password"
+                                       class="form-control"
+                                       placeholder="Şifreniz"
+                                       maxlength="32" />
+                            <div class="input-group-append">
+                                <div class="input-group-text icons-box">
+                                    <span class="material-icons">lock</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="validation-message">
+                            <ValidationMessage For="@(()=> userLoginRequest.Password)" />
                         </div>
                     </div>
-                </div>
-                <div class="validation-message">
-                    <ValidationMessage For="@(()=> userLoginRequest.Password)" />
+                    <div class="form-group row check-remember-me">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" checked="" />
+                            <label for="rememberMe">
+                                Beni Hatırla
+                            </label>
+                        </div>
+                    </div>
+                    <p class="text-danger" style="font-size: 12px;">@error</p>
+                    <div class="form-group row login-btn mr-0 ml-0 pr-0 pl-0">
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+                            Giriş
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="form-group row check-remember-me">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" checked="" />
-                    <label for="rememberMe">
-                        Beni Hatırla
-                    </label>
-                </div>
-            </div>
-            <p class="text-danger" style="font-size: 12px;">@error</p>
-            <div class="form-group row login-btn mr-0 ml-0 pr-0 pl-0">
-                <button type="submit"
-                        class="btn btn-primary btn-block">
-                    Giriş
-                </button>
-            </div>
+
         </EditForm>
         <div class="mb-1 forgot-password">
             <a>

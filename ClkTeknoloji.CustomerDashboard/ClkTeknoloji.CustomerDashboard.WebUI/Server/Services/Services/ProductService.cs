@@ -69,7 +69,13 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
             {
                 throw new Exception("İlgili kayıt bulunamadı");
             }
+            var dbCustomer = await context.Customers.Where(i=>i.Id == Product.CustomerId).FirstOrDefaultAsync();
+            if (dbCustomer ==null)
+            {
+                //işlem yapılacak
+            }
 
+            dbProduct.Customer = dbCustomer;
             mapper.Map(Product, dbProduct);
             context.Products.Update(dbProduct);
             await context.SaveChangesAsync();

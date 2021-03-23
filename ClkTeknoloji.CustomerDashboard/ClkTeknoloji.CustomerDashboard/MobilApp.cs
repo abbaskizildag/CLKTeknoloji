@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Net.Http;
+using Blazored.LocalStorage;
+using Blazored.Modal;
+using ClkTeknoloji.CustomerDashboard.Utilis;
+using ClkTeknoloji.Shared.Service.Customers;
+using ClkTeknoloji.Shared.Service.Products;
 using ClkTeknoloji.Shared.Service.Users;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -21,7 +27,7 @@ namespace ClkTeknoloji.CustomerDashboard
                     services.AddBlazorHybrid();
 
 
-                    var apiUri = "https://kizildag.developcu.com/"; //Buraya ip adresi girilmeli
+                    var apiUri = "http://f42b27bb08fc.ngrok.io"; //Buraya ip adresi girilmeli
                     services.AddScoped(sp =>
                     {
                         var client = new HttpClient
@@ -31,8 +37,18 @@ namespace ClkTeknoloji.CustomerDashboard
 
                         return client;
                     });
+                    services.AddAuthorizationCore();
+                    services.AddScoped<AuthStateProvider>();
+                    services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<AuthStateProvider>());
+                    services.AddBlazoredModal();
+                    services.AddBlazoredLocalStorage();
 
-                    services.AddScoped<IUserService, UserService>();
+                    services.AddSingleton<IUserService, UserService>();
+                    services.AddSingleton<IProductService, ProductService>();
+                    services.AddSingleton<ICustomerService, CustomerService>();
+
+
+
 
 
                     // Register app-specific services

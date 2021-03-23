@@ -7,23 +7,26 @@
 
     <div class="form-row">
         <div class="form-group col-md-6">
-            <label>CreateUser Id</label>
+            <label>Kullanıcı Id</label>
             <InputNumber @bind-Value="@productModel.CreatedUserId" class="form-control" />
             <ValidationMessage For="@(()=>productModel.CreatedUserId)" />
         </div>
         <div class="form-group col-md-6">
-            <label>Müşteri No(Sayısal)</label>
+            <label>Müşteri Id</label>
             <InputNumber @bind-Value="@productModel.CustomerId" class="form-control" />
             <ValidationMessage For="@(()=>productModel.CustomerId)" />
         </div>
-
         <div class="form-group col-md-6">
-            <label>Tipi(Bilgisayar Telefon)</label>
+            <label>Servis Id</label>
+            <InputNumber @bind-Value="@productModel.ServiceId" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.ServiceId)" />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Arıza Türü</label>
             <InputText @bind-Value="@productModel.Type" class="form-control" />
             <ValidationMessage For="@(()=>productModel.Type)" />
         </div>
-    </div>
-    <div class="form-row">
+
         <div class="form-group col-md-6">
             <label>Arıza Bilgisi</label>
             <InputText @bind-Value="@productModel.Information" class="form-control" />
@@ -35,20 +38,17 @@
             <InputText @bind-Value="@productModel.PartOfProduct" class="form-control" />
             <ValidationMessage For="@(()=>productModel.PartOfProduct)" />
         </div>
+
+        <div class="form-group col-md-6">
+            <label>Statü(Yapılıyor/Tamamlandı</label>
+            <InputText @bind-Value="@productModel.Statu" class="form-control" />
+            <ValidationMessage For="@(()=>productModel.Statu)" />
+        </div>
+
         <div class="form-group col-md-6">
             <label>Fiyat</label>
             <InputNumber @bind-Value="@productModel.Price" class="form-control" />
             <ValidationMessage For="@(()=>productModel.Price)" />
-        </div>
-        <div class="form-group col-md-6">
-            <label>Statü</label>
-            <InputText @bind-Value="@productModel.Statu" class="form-control" />
-            <ValidationMessage For="@(()=>productModel.Statu)" />
-        </div>
-        <div class="form-group col-md-6">
-            <label>Servis</label>
-            <InputNumber @bind-Value="@productModel.ServiceId" class="form-control" />
-            <ValidationMessage For="@(()=>productModel.ServiceId)" />
         </div>
     </div>
     <div class="form-row">
@@ -99,11 +99,11 @@
             {
                 await productService.UpdateProduct(productModel);
 
-                pageTitle = "Edit User";
+                pageTitle = "Kayıt Formu";
             }
             else
             {
-                pageTitle = "Create User";
+                pageTitle = "Kayıt Formu";
 
                 await productService.CreateProduct(productModel);
 
@@ -130,7 +130,7 @@
         {
             try
             {
-                pageTitle = "Edit User";
+                pageTitle = "Kayıt Formunu Düzenle";
                 productModel = await productService.GetProductById(ProductId);
             }
             catch (Exception ex)

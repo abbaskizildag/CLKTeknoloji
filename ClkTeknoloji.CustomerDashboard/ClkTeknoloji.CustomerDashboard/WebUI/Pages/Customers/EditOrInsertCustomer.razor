@@ -1,0 +1,119 @@
+﻿@page "/customers/add"
+@page "/customers/edit/{CustomerId:int}"
+
+<h3>@pageTitle</h3>
+<EditForm Model="@customerModel" OnValidSubmit="editOrUpdate">
+    <DataAnnotationsValidator />
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Adı</label>
+            <InputText @bind-Value="@customerModel.FirstName" class="form-control" />
+            <ValidationMessage For="@(()=>customerModel.FirstName)" />
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Soyadı</label>
+            <InputText @bind-Value="@customerModel.LastName" class="form-control" />
+            <ValidationMessage For="@(()=>customerModel.LastName)" />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Telefon No</label>
+            <InputText @bind-Value="@customerModel.PhoneNumber" class="form-control" />
+            <ValidationMessage For="@(()=>customerModel.PhoneNumber)" />
+        </div>
+
+        <div class="form-group col-md-6">
+            <label>Adres</label>
+            <InputText @bind-Value="@customerModel.Address" class="form-control" />
+            <ValidationMessage For="@(()=>customerModel.Address)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @*<SaveButtonComponent Caption="Save"></SaveButtonComponent>
+            <CancelButtonComponent OnClick="goBackUserList"> </CancelButtonComponent>*@
+        <button class="btn btn-primary">Kaydet</button>
+        <button class="btn btn-secondary" @onclick="goCustomerListPage">Listeye Geri Dön</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public int CustomerId { get; set; }
+
+    [Inject] HttpClient httpClient { get; set; }
+
+    [Inject] public ICustomerService customerService { get; set; }
+
+    [Inject] NavigationManager navigationManager { get; set; }
+
+    private CustomerDto customerModel = new CustomerDto();
+
+    //[Inject] public ModalManager ModalManager { get; set; }
+
+    private string pageTitle = "Create Customer";
+
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+    void goBackCustomerList()
+    {
+        NavigationManager.NavigateTo("/customerslist");
+    }
+
+    async Task editOrUpdate()
+    {
+        try
+        {
+            if (CustomerId > 0)
+            {
+                await customerService.UpdateCustomer(customerModel);
+
+                pageTitle = "Edit User";
+            }
+            else
+            {
+                pageTitle = "Create User";
+
+                await customerService.CreateCustomer(customerModel);
+
+            }
+            goCustomerListPage();
+        }
+        catch (Exception ex)
+        {
+
+            //await ModalManager.ShowMessageAsync("Api Exception", ex.Message);
+        }
+        //catch (Exception ex)
+        //{
+
+        //    //await ModalManager.ShowMessageAsync("Exception", ex.Message);
+        //}
+
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (CustomerId > 0)
+        {
+            try
+            {
+                pageTitle = "Edit User";
+                customerModel = await customerService.GetCustomerById(CustomerId);
+            }
+            catch (Exception ex)
+            {
+                // await ModalManager.ShowMessageAsync("Api Exception", ex.Message);
+            }
+
+        }
+    }
+
+    protected void goCustomerListPage()
+    {
+        navigationManager.NavigateTo("/customerslist");
+    }
+}
