@@ -17,8 +17,10 @@
             <ValidationMessage For="@(()=>productModel.CustomerId)" />
         </div>
         <div class="form-group col-md-6">
-            <label>Servis Id</label>
-            <InputNumber @bind-Value="@productModel.ServiceId" class="form-control" />
+            <label>Servis Türü</label>
+            <ClkTeknoloji.CustomerDashboard.CustomComponents.ServiceDropDown @bind-Value="productModel.ServiceId" @bind-Value:event="ValueChanged" />
+
+            @*<InputNumber @bind-Value="@productModel.ServiceId" class="form-control" />*@
             <ValidationMessage For="@(()=>productModel.ServiceId)" />
         </div>
         <div class="form-group col-md-6">

@@ -76,7 +76,7 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
             }
 
             dbProduct.Customer = dbCustomer;
-            mapper.Map(Product, dbProduct);
+           // mapper.Map(Product, dbProduct);
             context.Products.Update(dbProduct);
             await context.SaveChangesAsync();
             return mapper.Map<ProductDto>(dbProduct);

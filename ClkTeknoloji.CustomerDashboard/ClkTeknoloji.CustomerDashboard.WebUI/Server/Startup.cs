@@ -47,6 +47,8 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IServiceService, ServiceService>();
+
 
             services.AddCors(options =>
             {
@@ -72,7 +74,7 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
             });
 
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(opt=> opt.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddRazorPages();
 
             services.AddResponseCompression(opts =>

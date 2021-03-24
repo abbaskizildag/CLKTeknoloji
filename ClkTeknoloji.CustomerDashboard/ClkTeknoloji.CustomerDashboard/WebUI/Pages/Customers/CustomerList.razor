@@ -18,7 +18,7 @@
                 <th scope="col">Telefon Numarası</th>
                 <th scope="col">Oluşturulma Tarihi</th>
                 <th scope="col">Adres</th>
-                <th scope="col">Müşterinin Kayıtlı</th>
+                <th scope="col">Müşterinin Kayıtlı Ürünleri</th>
                 <th scope="col">#</th>
             </tr>
         </thead>
@@ -31,7 +31,7 @@
                 <td>@customer.PhoneNumber</td>
                 <td>@customer.CreateDate</td>
                 <td>@customer.Address</td>
-                <td>@customer.ProductId</td>
+                <td>@customer.Products.Count()</td>
 
                 <td>
                     <button class="btn btn-danger" @onclick="@(()=>DeleteCustomer(customer.Id))">Sil</button>

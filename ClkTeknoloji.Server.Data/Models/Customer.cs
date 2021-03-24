@@ -6,10 +6,7 @@ namespace ClkTeknoloji.Server.Data.Models
 {
    public class Customer
     {
-        public Customer()
-        {
-            this.Products = new List<Product>();
-        }
+
         public int Id { get; set; }
         public DateTime CreateDate { get; set; }
         public string FirstName { get; set; }

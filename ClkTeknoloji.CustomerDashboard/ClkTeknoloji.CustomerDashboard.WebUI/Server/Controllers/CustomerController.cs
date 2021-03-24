@@ -14,8 +14,8 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-                private readonly ICustomerService customerService;
-        
+        private readonly ICustomerService customerService;
+
         public CustomerController(ICustomerService ProductService)
         {
             customerService = ProductService;

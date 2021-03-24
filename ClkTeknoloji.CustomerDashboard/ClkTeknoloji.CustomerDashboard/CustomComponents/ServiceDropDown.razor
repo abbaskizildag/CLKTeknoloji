@@ -1,0 +1,80 @@
+﻿
+@if (serviceList == null)
+{
+    <p>
+        <em>
+            @loadingMessage
+        </em>
+    </p>
+}
+else
+{
+    <BlazoredTypeahead SearchMethod="@searchService"
+                       TValue="ServiceDto"
+                       TItem="ServiceDto"
+                       Value="selectedServices"
+                       ValueChanged="SelectedServiceChanged"
+                       ValueExpression="@(() => selectedServices)"
+                       placeholder="Search by service name"
+                       ShowDropDownOnFocus="true"
+                       EnableDropDown="true"
+                       Debounce="500">
+        <SelectedTemplate>
+            @context.Name
+        </SelectedTemplate>
+        <ResultTemplate>
+            @context.Name (@context.Id.ToString())
+        </ResultTemplate>
+        <NotFoundTemplate>
+            Sorry, there weren't any search results.
+        </NotFoundTemplate>
+    </BlazoredTypeahead>
+}
+
+
+
+
+
+@code {
+    [Parameter] public int Value { get; set; }
+
+    [Parameter] public EventCallback<int> ValueChanged { get; set; }
+
+    [Inject] IDropDownService DropDownService { get; set; }
+
+    List<ServiceDto> serviceList;
+
+    ServiceDto selectedServices = new ServiceDto();
+
+    string loadingMessage = "Loading";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            serviceList = await DropDownService.GetAllService();
+        }
+        catch (Exception)
+        {
+
+            loadingMessage = "Loading Error";
+        }
+    }
+
+    private Task SelectedServiceChanged(ServiceDto service)
+    {
+        if (service ==null)
+        {
+            return ValueChanged.InvokeAsync(0);
+
+        }
+        selectedServices = service;
+        Value = service.Id;
+        return ValueChanged.InvokeAsync(service.Id);
+    }
+
+    async Task<IEnumerable<ServiceDto>> searchService(string searchText)
+    {
+        return await Task.FromResult(serviceList.Where(i => i.Name.ToUpper().Contains(searchText.ToUpper())).ToList());
+    }
+}

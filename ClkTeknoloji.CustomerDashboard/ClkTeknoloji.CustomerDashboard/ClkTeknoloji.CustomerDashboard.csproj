@@ -17,6 +17,7 @@
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="3.0.0" />
     <PackageReference Include="Blazored.Modal" Version="6.0.1" />
+    <PackageReference Include="Blazored.Typeahead" Version="4.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.4" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />

@@ -15,6 +15,11 @@ namespace ClkTeknoloji.Server.Data.Context.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
             builder.ToTable("Customers");
 
+            builder.HasMany(i => i.Products)
+            .WithOne(i => i.Customer)
+            .HasForeignKey(i => i.CustomerId)
+            .HasConstraintName("product_customer_id_fk");
+
         }
     }
 }

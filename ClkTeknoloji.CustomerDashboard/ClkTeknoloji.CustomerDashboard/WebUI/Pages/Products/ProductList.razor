@@ -10,45 +10,50 @@
 <br />
 @if (productsList != null)
 {
-    <table class="table table-hover table-sm">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Ekleyen Personel</th>
-                <th scope="col">Müşteri Id</th>
-                <th scope="col">Servis Id</th>
-                <th scope="col">Durum</th>
-                <th scope="col">Tipi</th>
-                <th scope="col">Bilgi</th>
-                <th scope="col">Alınan Parçalar</th>
-                <th scope="col">Fiyat</th>
+    <div class="container">
+        <div class="row">
+            <table class="table table-hover table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Ekleyen Personel</th>
+                        <th scope="col">Müşteri Id</th>
+                        <th scope="col">Servis Id</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">Tipi</th>
+                        <th scope="col">Bilgi</th>
+                        <th scope="col">Alınan Parçalar</th>
+                        <th scope="col">Fiyat</th>
 
-                <th scope="col">#</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in productsList)
-            {
-            <tr>
-                <td>@user.Id</td>
-                <td>@user.CreatedUserId</td>
-                <td>@user.Customer.FirstName</td>
-                <td>@user.Service.Name</td>
-                <td>@user.Statu</td>
-                <td>@user.Type</td>
-                <td>@user.Information</td>
-                <td>@user.PartOfProduct</td>
-                <td>@user.Price</td>
+                        <th scope="col">#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in productsList)
+                    {
+                        <tr>
+                            <td>@user.Id</td>
+                            <td>@user.CreatedUserId</td>
+                            <td>@user.Customer.FirstName</td>
+                            <td>@user.Service.Name</td>
+                            <td>@user.Statu</td>
+                            <td>@user.Type</td>
+                            <td>@user.Information</td>
+                            <td>@user.PartOfProduct</td>
+                            <td>@user.Price</td>
 
-                @*<td><span class="@spanClass">@(user.IsActive?"Active":"Passive")</span></td>*@
-                <td>
-                    <button class="btn btn-danger" @onclick="@(()=>DeleteUser(user.Id))">Sil</button>
-                    <button class="btn btn-success" @onclick="(() => goUpdatePage(user.Id))">Güncelle</button>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
+                            @*<td><span class="@spanClass">@(user.IsActive?"Active":"Passive")</span></td>*@
+                            <td>
+                                <button class="btn btn-danger" @onclick="@(()=>DeleteUser(user.Id))">Sil</button>
+                                <button class="btn btn-success" @onclick="(() => goUpdatePage(user.Id))">Güncelle</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 }
 
 @code {

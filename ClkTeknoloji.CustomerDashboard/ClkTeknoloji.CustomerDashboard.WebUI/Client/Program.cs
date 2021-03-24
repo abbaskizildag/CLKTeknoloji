@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Blazored.Modal;
 using ClkTeknoloji.CustomerDashboard.Utilis;
 using ClkTeknoloji.Shared.Service.Customers;
+using ClkTeknoloji.Shared.Service.DropDowns;
 using ClkTeknoloji.Shared.Service.Products;
 using ClkTeknoloji.Shared.Service.Users;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -31,6 +32,8 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Client
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<IDropDownService, DropDownService>();
+
 
             builder.Services.AddSingleton(sp => new CounterState());
             builder.Services.AddAuthorizationCore();

@@ -27,7 +27,7 @@ namespace ClkTeknoloji.CustomerDashboard
                     services.AddBlazorHybrid();
 
 
-                    var apiUri = "http://f42b27bb08fc.ngrok.io"; //Buraya ip adresi girilmeli
+                    var apiUri = "https://kizildag.developcu.com/"; //Buraya ip adresi girilmeli
                     services.AddScoped(sp =>
                     {
                         var client = new HttpClient
