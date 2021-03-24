@@ -15,7 +15,7 @@ else
                        Value="selectedServices"
                        ValueChanged="SelectedServiceChanged"
                        ValueExpression="@(() => selectedServices)"
-                       placeholder="Search by service name"
+                       placeholder="Servis adı giriniz"
                        ShowDropDownOnFocus="true"
                        EnableDropDown="true"
                        Debounce="500">
@@ -53,6 +53,8 @@ else
         try
         {
             serviceList = await DropDownService.GetAllService();
+            if ( Value!=0) //value doluysa 
+                selectedServices = serviceList.FirstOrDefault(i => i.Id == Value);
         }
         catch (Exception)
         {
@@ -65,7 +67,7 @@ else
     {
         if (service ==null)
         {
-            return ValueChanged.InvokeAsync(0);
+            // return ValueChanged.InvokeAsync(0);
 
         }
         selectedServices = service;

@@ -1,0 +1,82 @@
+﻿
+@if (customerList == null)
+{
+    <p>
+        <em>
+            @loadingMessage
+        </em>
+    </p>
+}
+else
+{
+    <BlazoredTypeahead SearchMethod="@searchService"
+                       TValue="CustomerDto"
+                       TItem="CustomerDto"
+                       Value="selectedCustomer"
+                       ValueChanged="SelectedServiceChanged"
+                       ValueExpression="@(() => selectedCustomer)"
+                       placeholder="Müşteri İsimi Giriniz"
+                       ShowDropDownOnFocus="true"
+                       EnableDropDown="true"
+                       Debounce="500">
+        <SelectedTemplate>
+            @context.FullName
+        </SelectedTemplate>
+        <ResultTemplate>
+            @context.FullName (@context.PhoneNumber.ToString())
+        </ResultTemplate>
+        <NotFoundTemplate>
+            Sorry, there weren't any search results.
+        </NotFoundTemplate>
+    </BlazoredTypeahead>
+}
+
+
+
+
+
+@code {
+    [Parameter] public int Value { get; set; }
+
+    [Parameter] public EventCallback<int> ValueChanged { get; set; }
+
+    [Inject] ICustomerService CustomerService { get; set; }
+
+    List<CustomerDto> customerList;
+
+    CustomerDto selectedCustomer = new CustomerDto();
+
+    string loadingMessage = "Loading";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            customerList = await CustomerService.GetAllCustomer();
+            if (Value != 0) //value doluysa
+                selectedCustomer = customerList.FirstOrDefault(i => i.Id == Value);
+        }
+        catch (Exception)
+        {
+
+            loadingMessage = "Loading Error";
+        }
+    }
+
+    private Task SelectedServiceChanged(CustomerDto customer)
+    {
+        if (customer == null)
+        {
+            // return ValueChanged.InvokeAsync(0);
+
+        }
+        selectedCustomer = customer;
+        Value = customer.Id;
+        return ValueChanged.InvokeAsync(customer.Id);
+    }
+
+    async Task<IEnumerable<CustomerDto>> searchService(string searchText)
+    {
+        return await Task.FromResult(customerList.Where(i => i.FullName.ToUpper().Contains(searchText.ToUpper())).ToList());
+    }
+}

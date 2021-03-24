@@ -12,6 +12,7 @@ namespace ClkTeknoloji.Shared.DTOs
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
 
         public virtual ICollection<ProductDto> Products { get; set; }
 

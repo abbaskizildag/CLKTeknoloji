@@ -4,6 +4,7 @@ using Blazored.LocalStorage;
 using Blazored.Modal;
 using ClkTeknoloji.CustomerDashboard.Utilis;
 using ClkTeknoloji.Shared.Service.Customers;
+using ClkTeknoloji.Shared.Service.DropDowns;
 using ClkTeknoloji.Shared.Service.Products;
 using ClkTeknoloji.Shared.Service.Users;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -27,7 +28,7 @@ namespace ClkTeknoloji.CustomerDashboard
                     services.AddBlazorHybrid();
 
 
-                    var apiUri = "https://kizildag.developcu.com/"; //Buraya ip adresi girilmeli
+                    var apiUri = "http://0ad15deaedfc.ngrok.io"; //Buraya ip adresi girilmeli
                     services.AddScoped(sp =>
                     {
                         var client = new HttpClient
@@ -46,6 +47,7 @@ namespace ClkTeknoloji.CustomerDashboard
                     services.AddSingleton<IUserService, UserService>();
                     services.AddSingleton<IProductService, ProductService>();
                     services.AddSingleton<ICustomerService, CustomerService>();
+                    services.AddSingleton<IDropDownService, DropDownService>();
 
 
 

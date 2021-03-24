@@ -2,75 +2,97 @@
 @page "/products/edit/{ProductId:int}"
 
 <h3>@pageTitle</h3>
-<EditForm Model="@productModel" OnValidSubmit="editOrUpdate">
-    <DataAnnotationsValidator />
 
-    <div class="form-row">
-        <div class="form-group col-md-6">
+@if (productModel != null)
+{
+
+    <EditForm Model="@productModel" OnValidSubmit="editOrUpdate">
+        <DataAnnotationsValidator />
+
+        <div class="form-row">
+            @*<div class="form-group col-md-6">
             <label>Kullanıcı Id</label>
             <InputNumber @bind-Value="@productModel.CreatedUserId" class="form-control" />
             <ValidationMessage For="@(()=>productModel.CreatedUserId)" />
-        </div>
-        <div class="form-group col-md-6">
-            <label>Müşteri Id</label>
-            <InputNumber @bind-Value="@productModel.CustomerId" class="form-control" />
-            <ValidationMessage For="@(()=>productModel.CustomerId)" />
-        </div>
-        <div class="form-group col-md-6">
-            <label>Servis Türü</label>
-            <ClkTeknoloji.CustomerDashboard.CustomComponents.ServiceDropDown @bind-Value="productModel.ServiceId" @bind-Value:event="ValueChanged" />
-
-            @*<InputNumber @bind-Value="@productModel.ServiceId" class="form-control" />*@
-            <ValidationMessage For="@(()=>productModel.ServiceId)" />
-        </div>
-        <div class="form-group col-md-6">
-            <label>Arıza Türü</label>
-            <InputText @bind-Value="@productModel.Type" class="form-control" />
-            <ValidationMessage For="@(()=>productModel.Type)" />
-        </div>
-
-        <div class="form-group col-md-6">
-            <label>Arıza Bilgisi</label>
-            <InputText @bind-Value="@productModel.Information" class="form-control" />
-            <ValidationMessage For="@(()=>productModel.Information)" />
-        </div>
-
-        <div class="form-group col-md-6">
-            <label>Alınan Parçalar</label>
-            <InputText @bind-Value="@productModel.PartOfProduct" class="form-control" />
-            <ValidationMessage For="@(()=>productModel.PartOfProduct)" />
-        </div>
-
-        <div class="form-group col-md-6">
-            <label>Statü(Yapılıyor/Tamamlandı</label>
-            <InputText @bind-Value="@productModel.Statu" class="form-control" />
-            <ValidationMessage For="@(()=>productModel.Statu)" />
-        </div>
-
-        <div class="form-group col-md-6">
-            <label>Fiyat</label>
-            <InputNumber @bind-Value="@productModel.Price" class="form-control" />
-            <ValidationMessage For="@(()=>productModel.Price)" />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            @*<div class="form-check">
-                <InputCheckbox @bind-Value="@userModel.IsActive" class="form-check-input" id="chUserStatus" />
-                <label for="chUserStatus" class="form-check-label">User Status</label>
-            </div>*@
+        </div>*@
+            <div class="form-group col-md-6">
+                <label>Müşteri İsimleri</label>
+                @*<InputNumber @bind-Value="@productModel.CustomerId" class="form-control" />*@
+                <ClkTeknoloji.CustomerDashboard.CustomComponents.CustomerDropDown @bind-Value="selectedCustomer" @bind-Value:event="ValueChanged" />
 
 
-        </div>
-    </div>
-    <div class="form-group">
-        @*<SaveButtonComponent Caption="Save"></SaveButtonComponent>
-            <CancelButtonComponent OnClick="goBackUserList"> </CancelButtonComponent>*@
-        <button class="btn btn-primary">Kaydet</button>
-        <button class="btn btn-secondary" @onclick="goUserListPage">Listeye Geri Dön</button>
-    </div>
-</EditForm>
+                <ValidationMessage For="@(()=>productModel.CustomerId)" />
+            </div>
+            <div class="form-group col-md-6">
+                <label>Servis Türü</label>
+                <ClkTeknoloji.CustomerDashboard.CustomComponents.ServiceDropDown @bind-Value="productModel.ServiceId" @bind-Value:event="ValueChanged" />
 
+                @*<InputNumber @bind-Value="@productModel.ServiceId" class="form-control" />*@
+                <ValidationMessage For="@(()=>productModel.ServiceId)" />
+            </div>
+            <div class="form-group col-md-6">
+                <label>Arıza Türü</label>
+                <InputSelect @bind-Value="@productModel.Type" class="form-control">
+                    <option value="Seçilmedi">Lütfen hangi tür olduğunu seçiniz.</option>
+                    <option value="Bilgisayar">Bilgisayar</option>
+                    <option value="Telefon">Telefon</option>
+                    <option value="Laptop">Laptop</option>
+                </InputSelect>
+                @*<InputText @bind-Value="@productModel.Type" class="form-control" />*@
+                <ValidationMessage For="@(()=>productModel.Type)" />
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Arıza Durumu</label>
+                @*<InputText @bind-Value="@productModel.Statu" class="form-control" />*@
+                <InputSelect @bind-Value="@productModel.Statu" class="form-control">
+                    <option value="Seçilmedi">Lütfen arıza durumu seçiniz.</option>
+                    <option value="Yapılıyor">Yapılıyor</option>
+                    <option value="Tamamlandı">Tamamlandı</option>
+                    <option value="İade">İade</option>
+                </InputSelect>
+                <ValidationMessage For="@(()=>productModel.Statu)" />
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Arıza Açıklaması</label>
+                <InputText @bind-Value="@productModel.Information" class="form-control" />
+                <ValidationMessage For="@(()=>productModel.Information)" />
+            </div>
+
+            <div class="form-group col-md-6">
+                <label>Alınan Parçalar</label>
+                <InputText @bind-Value="@productModel.PartOfProduct" class="form-control" />
+                <ValidationMessage For="@(()=>productModel.PartOfProduct)" />
+            </div>
+
+
+
+            <div class="form-group col-md-6">
+                <label>Fiyat</label>
+                <InputNumber @bind-Value="@productModel.Price" class="form-control" />
+                <ValidationMessage For="@(()=>productModel.Price)" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                @*<div class="form-check">
+                        <InputCheckbox @bind-Value="@userModel.IsActive" class="form-check-input" id="chUserStatus" />
+                        <label for="chUserStatus" class="form-check-label">User Status</label>
+                    </div>*@
+
+
+            </div>
+        </div>
+        <div class="form-group">
+            @*<SaveButtonComponent Caption="Save"></SaveButtonComponent>
+                <CancelButtonComponent OnClick="goBackUserList"> </CancelButtonComponent>*@
+            <button class="btn btn-primary">Kaydet</button>
+            <button class="btn btn-secondary" @onclick="goUserListPage">Listeye Geri Dön</button>
+        </div>
+    </EditForm>
+
+}
 @code {
     [Parameter] public int ProductId { get; set; }
 
@@ -82,9 +104,12 @@
 
     private ProductDto productModel = new ProductDto();
 
+    [Inject] ILocalStorageService localStorageService { get; set; }
+
+    public int selectedCustomer { get; set; } = 0;
     //[Inject] public ModalManager ModalManager { get; set; }
 
-    private string pageTitle = "Create Product";
+    private string pageTitle = "Servis Kayıt Formu";
 
     [Inject] NavigationManager NavigationManager { get; set; }
 
@@ -97,6 +122,9 @@
     {
         try
         {
+            var userId = await localStorageService.GetItemAsStringAsync("UserId");
+            productModel.CreatedUserId = int.Parse(userId);
+            productModel.CustomerId = selectedCustomer;
             if (ProductId > 0)
             {
                 await productService.UpdateProduct(productModel);
@@ -105,8 +133,8 @@
             }
             else
             {
-                pageTitle = "Kayıt Formu";
 
+                pageTitle = "Kayıt Formu";
                 await productService.CreateProduct(productModel);
 
             }
@@ -134,6 +162,7 @@
             {
                 pageTitle = "Kayıt Formunu Düzenle";
                 productModel = await productService.GetProductById(ProductId);
+                selectedCustomer =(int) productModel.CustomerId;
             }
             catch (Exception ex)
             {
