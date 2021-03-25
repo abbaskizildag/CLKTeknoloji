@@ -148,6 +148,16 @@ app {
     .main .top-row a, .main .top-row .btn-link {
         margin-left: 0;
     }
+    .login-box {
+        width: 430px;
+        padding: 10px 30px 20px 30px;
+        display: block;
+        background-color: white;
+        margin: 20px;
+        border-radius: 5px;
+        box-shadow: 2px 2px 20px 2px #dbdbdb;
+        border: 1px solid #c9c9c9;
+    }
 }
 
 @media (min-width: 768px) {
@@ -180,8 +190,43 @@ app {
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+    .login-box {
+        width: 430px;
+        padding: 10px 30px 20px 30px;
+        display: block;
+        background-color: white;
+        margin: 20px;
+        border-radius: 5px;
+        box-shadow: 2px 2px 20px 2px #dbdbdb;
+        border: 1px solid #c9c9c9;
+    }
 }
 
+@media (max-width: 550px) {
+    .login-box {
+        width: 400px;
+
+    }
+}
+@media (max-width: 450px) {
+    .login-box {
+        width: 300px;
+    }
+}
+@media (max-width: 400px) {
+    .login-box {
+        width: 260px;
+
+    }
+
+
+}
+@media (max-width: 415px) {
+    .login-box {
+        width: 280px;
+    }
+
+}
 .login-page-container {
     margin: 50px 50px 50px 30px;
 }
@@ -207,16 +252,7 @@ app {
         background-color: transparent;
     }
 
-.login-box {
-    width: 430px;
-    padding: 10px 30px 20px 30px;
-    display: block;
-    background-color: white;
-    margin: 20px;
-    border-radius: 5px;
-    box-shadow: 2px 2px 20px 2px #dbdbdb;
-    border: 1px solid #c9c9c9;
-}
+
 
 .login-label {
     font-size: 1.4rem;
