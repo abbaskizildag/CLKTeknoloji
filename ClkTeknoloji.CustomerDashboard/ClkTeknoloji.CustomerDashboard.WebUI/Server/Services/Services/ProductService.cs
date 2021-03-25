@@ -52,7 +52,7 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
 
         public async Task<List<ProductDto>> GetAllProduct()
         {
-            var products = await context.Products.Include(x => x.Service).Include(x=>x.Customer).ToListAsync();
+            var products = await context.Products.Include(x => x.Service).Include(x=>x.Customer).OrderByDescending(x=>x.CreateDate).ToListAsync();
             return mapper.Map<List<ProductDto>>(products);
         }
 

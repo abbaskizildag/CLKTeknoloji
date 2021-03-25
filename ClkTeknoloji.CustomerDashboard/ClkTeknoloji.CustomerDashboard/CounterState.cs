@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 
 namespace ClkTeknoloji.CustomerDashboard
 {
@@ -10,6 +11,8 @@ namespace ClkTeknoloji.CustomerDashboard
         {
             CurrentCount++;
             StateChanged?.Invoke();
+            Console.WriteLine(JsonSerializer.Serialize(""));
+
         }
 
         public event Action StateChanged;

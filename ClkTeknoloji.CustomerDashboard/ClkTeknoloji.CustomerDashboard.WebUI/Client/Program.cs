@@ -33,6 +33,7 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Client
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<IDropDownService, DropDownService>();
+            builder.Services.AddAntDesign();
 
 
             builder.Services.AddSingleton(sp => new CounterState());

@@ -43,6 +43,7 @@ namespace ClkTeknoloji.CustomerDashboard
                     services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<AuthStateProvider>());
                     services.AddBlazoredModal();
                     services.AddBlazoredLocalStorage();
+                    services.AddAntDesign();
 
                     services.AddSingleton<IUserService, UserService>();
                     services.AddSingleton<IProductService, ProductService>();
