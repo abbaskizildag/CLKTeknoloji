@@ -1,4 +1,5 @@
 ﻿using ClkTeknoloji.Shared.DTOs;
+using ClkTeknoloji.Shared.FilterModels;
 using ClkTeknoloji.Shared.ResponseModels;
 using Newtonsoft.Json;
 using System;
@@ -53,6 +54,22 @@ namespace ClkTeknoloji.Shared.Service.Products
         public async Task<List<ProductDto>> GetAllProduct()
         {
             var response = await _httpClient.GetAsync("api/product/products");
+
+            var resultString = await response.Content.ReadAsStringAsync();
+
+            var result = JsonConvert.DeserializeObject<ServiceResponse<List<ProductDto>>>(resultString);
+
+            if (!result.Success)
+            {
+
+            }
+
+            return result.Value;
+        }
+
+        public async Task<List<ProductDto>> GetProductByFilter(ProductListFilterModel filter)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/product/filter",filter);
 
             var resultString = await response.Content.ReadAsStringAsync();
 

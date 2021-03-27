@@ -1,5 +1,6 @@
 ﻿using ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Infasture;
 using ClkTeknoloji.Shared.DTOs;
+using ClkTeknoloji.Shared.FilterModels;
 using ClkTeknoloji.Shared.ResponseModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,15 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Controllers
             return new ServiceResponse<bool>
             {
                 Value = await productService.DeleteProductById(Id)
+            };
+        }
+
+        [HttpPost("Filter")]
+        public async Task<ServiceResponse<List<ProductDto>>> GetProductByFilter([FromBody] ProductListFilterModel Filter)
+        {
+            return new ServiceResponse<List<ProductDto>>
+            {
+                Value = await productService.GetProductByFilter(Filter)
             };
         }
     }

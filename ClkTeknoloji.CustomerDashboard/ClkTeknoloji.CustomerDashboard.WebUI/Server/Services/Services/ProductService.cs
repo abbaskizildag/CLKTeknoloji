@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
+using AutoMapper.QueryableExtensions;
 using ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Infasture;
 using ClkTeknoloji.Server.Data.Context;
 using ClkTeknoloji.Shared.DTOs;
+using ClkTeknoloji.Shared.FilterModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -52,7 +54,7 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
 
         public async Task<List<ProductDto>> GetAllProduct()
         {
-            var products = await context.Products.Include(x => x.Service).Include(x=>x.Customer).OrderByDescending(x=>x.CreateDate).ToListAsync();
+            var products = await context.Products.Include(x => x.Service).Include(x => x.Customer).OrderByDescending(x => x.CreateDate).ToListAsync();
             return mapper.Map<List<ProductDto>>(products);
         }
 
@@ -69,8 +71,8 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
             {
                 throw new Exception("İlgili kayıt bulunamadı");
             }
-            var dbCustomer = await context.Customers.Where(i=>i.Id == Product.CustomerId).FirstOrDefaultAsync();
-            if (dbCustomer ==null)
+            var dbCustomer = await context.Customers.Where(i => i.Id == Product.CustomerId).FirstOrDefaultAsync();
+            if (dbCustomer == null)
             {
                 //işlem yapılacak
             }
@@ -85,11 +87,34 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
             dbProduct.Information = Product.Information;
             dbProduct.PartOfProduct = Product.PartOfProduct;
             dbProduct.ExpireDate = Product.ExpireDate;
-          
-           // mapper.Map(Product, dbProduct);
+
+            // mapper.Map(Product, dbProduct);
             context.Products.Update(dbProduct);
             await context.SaveChangesAsync();
             return mapper.Map<ProductDto>(dbProduct);
+        }
+
+        public async Task<List<ProductDto>> GetProductByFilter(ProductListFilterModel filter)
+        {
+            var query = context.Products.Include(i => i.Service).Include(i => i.Customer).AsQueryable();
+
+            if (filter.CustomerId != 0)
+            {
+                query = query.Where(i => i.CustomerId == filter.CustomerId);
+            }
+            //eğer soru işareti koysaydım nullable olabilir demişim.
+            if (filter.CreateDateFirst.HasValue)
+                query = query.Where(i => i.CreateDate >= filter.CreateDateFirst);
+
+            if (filter.CreateDateFirst > DateTime.MinValue) //null olabilir demediğim için min.value değerini kontrol ediyorum.
+                query = query.Where(i => i.CreateDate <= filter.CreateDateLast);
+
+            var list = await query
+                .ProjectTo<ProductDto>(mapper.ConfigurationProvider)
+                .OrderBy(i => i.CreateDate)
+                .ToListAsync();
+           
+            return list;
         }
     }
 }

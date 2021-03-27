@@ -4,6 +4,41 @@
 
 <h3>Teknik Servisde Kayıtlı Ürün Listesi</h3>
 
+<div class="card">
+    <div class="card-header d-flex align-items-center h-75">
+        Filter Section
+    </div>
+
+    <div class="card-body">
+        <EditForm Model="@filterModel">
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Müşteri Adı</label>
+                    <ClkTeknoloji.CustomerDashboard.CustomComponents.CustomerDropDown @bind-Value="selectedCustomer" @bind-Value:event="ValueChanged" />
+                    @*<MealOrdering.Client.CustomComponents.UserListDropDown @bind-Value="filterModel.CreatedUserId" @bind-Value:event="ValueChanged"></MealOrdering.Client.CustomComponents.UserListDropDown>*@
+                </div>
+
+                <div class="form-group col">
+                    <label>Tarih Aralığı</label>
+                    <div class="d-flex">
+                        <InputDate class="form-control" @bind-Value="filterModel.CreateDateFirst" />
+                        <InputDate class="form-control" @bind-Value="filterModel.CreateDateLast" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="btn-group">
+
+                    <button class="btn btn-primary m-1" @onclick="ReLoadList">
+                        <span class="fas fa-search"></span> Arama Yap</button>
+                        @*<AddNewButtonComponent Caption="Create Order" OnClick="GoCreateOrder" />*@
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
 <div class="btn-group">
     <div class="container">
         <button class="btn btn-primary m-1" @onclick="goCreateUserPage"><span class="fas fa-user-plus"></span> Yeni Servis Kaydı Oluştur</button>
@@ -56,6 +91,8 @@
 
     [Inject] ModalManager modalManager { get; set; }
 
+    public ProductListFilterModel filterModel = new ProductListFilterModel() { CreateDateFirst = DateTime.Now.Date, CreateDateLast = DateTime.Now.Date };
+
     IEnumerable<ProductDto> selectedRows;
     ITable table;
 
@@ -63,6 +100,7 @@
     int _pageSize = 10;
     int _total = 0;
 
+    public int selectedCustomer { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -109,5 +147,14 @@
     {
         // forecasts = forecasts.Where(x => x.Id != id).ToArray();
         // _total = forecasts.Length;
+    }
+
+    public async Task ReLoadList()
+    {
+        //loading = true;
+
+        filterModel.CustomerId = selectedCustomer;
+
+        productsList = (await productService.GetProductByFilter(filterModel)).ToList();
     }
 }
