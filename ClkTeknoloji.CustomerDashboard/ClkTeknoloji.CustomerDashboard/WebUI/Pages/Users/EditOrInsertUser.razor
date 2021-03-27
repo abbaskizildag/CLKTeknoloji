@@ -42,10 +42,8 @@
         </div>
     </div>
     <div class="form-group">
-        @*<SaveButtonComponent Caption="Save"></SaveButtonComponent>
-        <CancelButtonComponent OnClick="goBackUserList"> </CancelButtonComponent>*@
-        <button class="btn btn-primary">Kaydet</button>
-        <button class="btn btn-secondary" @onclick="goUserListPage">Listeye Geri Dön</button>
+        <button class="btn btn-primary"><span class="fas fa-check"></span> Kaydet</button>
+        <button class="btn btn-secondary" @onclick="goUserListPage"><span class="fas fa-undo"></span> Listeye Geri Dön</button>
     </div>
 </EditForm>
 
@@ -62,7 +60,7 @@
 
     //[Inject] public ModalManager ModalManager { get; set; }
 
-    private string pageTitle = "Create User";
+    private string pageTitle = "Yeni Kullanıcı Oluştur";
 
     [Inject] NavigationManager NavigationManager { get; set; }
 
@@ -79,11 +77,11 @@
             {
                 await userService.UpdateUser(userModel);
 
-                pageTitle = "Edit User";
+                pageTitle = "Kullanıcı Düzenle";
             }
             else
             {
-                pageTitle = "Create User";
+                pageTitle = "Yeni Kullanıcı Oluştur";
 
                 await userService.CreateUser(userModel);
 
@@ -110,7 +108,7 @@
         {
             try
             {
-                pageTitle = "Edit User";
+                pageTitle = "Kullanıcı Düzenle";
                 userModel = await userService.GetUserById(UserId);
             }
             catch (Exception ex)

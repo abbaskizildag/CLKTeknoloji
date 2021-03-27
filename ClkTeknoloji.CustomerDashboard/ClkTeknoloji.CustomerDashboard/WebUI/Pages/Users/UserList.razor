@@ -7,44 +7,10 @@
 
 <div class="btn-group">
     <div class="container">
-        <button class="btn btn-primary" @onclick="goCreateUserPage">Yeni Personel Oluştur</button>
-
+        <button class="btn btn-primary m-1" @onclick="goCreateUserPage"><span class="fas fa-user-plus"></span> Yeni Personel Oluştur</button>
     </div>
 </div>
 <br />
-@*@if (usersList != null)
-{
-    <table class="table table-hover table-sm">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Adı Soyadı</th>
-                <th scope="col">E-Mail Adres</th>
-                <th scope="col">Oluşturulma Tarihi</th>
-                <th scope="col">Durum</th>
-                <th scope="col">#</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in usersList)
-            {
-                string spanClass = "badge badge-pill badge-" + (user.IsActive ? "success" : "danger");
-                <tr>
-                    <td>@user.Id</td>
-                    <td>@user.FullName</td>
-                    <td>@user.EMailAddress</td>
-                    <td>@user.CreateDate</td>
-                    <td><span class="@spanClass">@(user.IsActive?"Active":"Passive")</span></td>
-                    <td>
-                        <button class="btn btn-danger" @onclick="@(()=>DeleteUser(user.Id))">Sil</button>
-                        <button class="btn btn-success" @onclick="(() => goUpdatePage(user.Id))">Güncelle</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}*@
-
 <Table @ref="table" Bordered=@true Size=@TableSize.Small
        TItem="UserDto"
        DataSource="@usersList"
@@ -54,10 +20,10 @@
        @bind-SelectedRows="selectedRows"
        OnChange="OnChange">
     <Selection Key="@(context.Id.ToString())" />
-    <Column  TData="int"  Title="Id"  @bind-Field="@context.Id"  />
+    <Column Ellipsis Title="Id"  @bind-Field="@context.Id"  Width="40px"  />
     <Column  Title="Oluşturulma Tarihi" @bind-Field="@context.CreateDate" Format="yyyy-MM-dd"  />
     <Column   TData="string" Title="Email" @bind-Field="@context.EMailAddress" Ellipsis />
-    <ActionColumn Title="Durum" >
+    <ActionColumn Title="Durum" Width="70px">
         <Space>
             <SpaceItem>          
                 <span class="badge badge-pill badge-@(context.IsActive?"success":"danger")">@(context.IsActive?"Aktif":"Pasif")</span>
