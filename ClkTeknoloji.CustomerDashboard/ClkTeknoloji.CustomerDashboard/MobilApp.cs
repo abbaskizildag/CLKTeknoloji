@@ -28,7 +28,10 @@ namespace ClkTeknoloji.CustomerDashboard
                     services.AddBlazorHybrid();
 
                     services.AddBlazoredModal();
-                    var apiUri = "http://cb250e7aa52d.ngrok.io/"; //Buraya ip adresi girilmeli
+
+                    services.AddScoped<ModalManager>();
+
+                    var apiUri = "http://b6b9e1f4d953.ngrok.io"; //Buraya ip adresi girilmeli
                     services.AddScoped(sp =>
                     {
                         var client = new HttpClient

@@ -1,11 +1,34 @@
 @page "/"
-
+@using ClkTeknoloji.CustomerDashboard.CustomComponents.ModalComponents 
 <h1>Merhaba, CLK personeli</h1>
 
 Sistemi kullanabilmek için öncelikle sol taraftaki menülerden takip kaydı oluşturmalısın.
+<h3>@title</h3>
+<button @onclick="@changeTitle" class="btn btn-primary">View Movies</button>
 
-<button @onclick="@(() => Modal.Show<EditOrInsertUser>("My Movies"))" class="btn btn-primary">View Movies</button>
+<button @onclick="@ShowConfirmation" class="btn btn-primary">Yes No Movies</button>
 
 @code {
-    [CascadingParameter] public IModalService Modal { get; set; }
+    [CascadingParameter]
+    IModalService Modal { get; set; }
+
+    [Inject]
+    ModalManager modalManager { get; set; }
+    private string title = "";
+    private async Task changeTitle()
+    {
+        await modalManager.ShowMessageAsync("Show Messa Title", "Kayıt Silindi", 3000);
+
+        //ModalParameters mParams = new ModalParameters();
+        //mParams.Add("Message", "Bu bir test popou");
+
+        //Modal.Show<ShowMessagePopupComponent>("Counter Popup page", mParams);
+    }
+
+    private async Task ShowConfirmation()
+    {
+        var res = await modalManager.ConfirmationAsync("Confirmations", "Are you suure that it will bee");
+        if (res) title = "yes just cliecked"; else title = "no just clicked";
+    }
+
 }
