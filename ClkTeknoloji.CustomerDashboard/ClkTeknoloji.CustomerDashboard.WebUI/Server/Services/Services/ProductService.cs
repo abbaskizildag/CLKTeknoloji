@@ -98,6 +98,10 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
         {
             var query = context.Products.Include(i => i.Service).Include(i => i.Customer).AsQueryable();
 
+            if (filter.Statu == "Seçilmedi") filter.Statu = null;
+            if (filter.Type == "Seçilmedi") filter.Type = null;
+
+
             if (filter.CustomerId != 0)
             {
                 query = query.Where(i => i.CustomerId == filter.CustomerId);
@@ -108,6 +112,16 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
 
             if (filter.CreateDateFirst > DateTime.MinValue) //null olabilir demediğim için min.value değerini kontrol ediyorum.
                 query = query.Where(i => i.CreateDate <= filter.CreateDateLast);
+
+            if (filter.ServiceId!=0)
+                query = query.Where(i => i.ServiceId == filter.ServiceId);
+
+            if ( filter.Statu != null)
+                query = query.Where(i => i.Statu == filter.Statu);
+
+
+            if (filter.Type != null)
+                query = query.Where(i => i.Type == filter.Type);
 
             var list = await query
                 .ProjectTo<ProductDto>(mapper.ConfigurationProvider)

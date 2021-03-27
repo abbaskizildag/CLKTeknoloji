@@ -12,7 +12,9 @@ namespace ClkTeknoloji.Shared.FilterModels
 
         public int CustomerId { get; set; }
 
-
+        public string Type { get; set; }
         public string Statu { get; set; }
+
+        public int ServiceId { get; set; }
     }
 }

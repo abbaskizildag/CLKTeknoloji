@@ -6,7 +6,7 @@
 
 <div class="card">
     <div class="card-header d-flex align-items-center h-75">
-        Filter Section
+        Arama Kısmı
     </div>
 
     <div class="card-body">
@@ -26,24 +26,54 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-row">
-                <div class="btn-group">
-
-                    <button class="btn btn-primary m-1" @onclick="ReLoadList">
-                        <span class="fas fa-search"></span> Arama Yap</button>
-                        @*<AddNewButtonComponent Caption="Create Order" OnClick="GoCreateOrder" />*@
+                <div class="form-group col">
+                    <label>Arıza Durumu</label>
+                    @*<InputText @bind-Value="@productModel.Statu" class="form-control" />*@
+                    <InputSelect @bind-Value="@filterModel.Statu" class="form-control">
+                        <option value="Seçilmedi">Lütfen arıza durumu seçiniz.</option>
+                        <option value="Yapılıyor">Yapılıyor</option>
+                        <option value="Tamamlandı">Tamamlandı</option>
+                        <option value="İade">İade</option>
+                    </InputSelect>
                 </div>
+
+                <div class="form-group col">
+                    <label>Arıza Türü</label>
+                    <InputSelect @bind-Value="@filterModel.Type" class="form-control">
+                        <option value="Seçilmedi">Lütfen hangi tür olduğunu seçiniz.</option>
+                        <option value="Bilgisayar">Bilgisayar</option>
+                        <option value="Telefon">Telefon</option>
+                        <option value="Laptop">Laptop</option>
+                    </InputSelect>
+                </div>
+
+                <div class="form-group col">
+                    <label>Servis</label>
+                    <InputSelect @bind-Value="@filterModel.ServiceId" class="form-control">
+                        <option value="0">Lütfen hangi tür olduğunu seçiniz.</option>
+                        <option value="1">CLK</option>
+                        <option value="2">Bizim Servis</option>
+                        <option value="3">Garanti</option>
+                    </InputSelect>
+                </div>
+
             </div>
+                <div class="form-row">
+                    <div class="btn-group">
+
+                        <button class="btn btn-primary m-1" @onclick="ReLoadList">
+                            <span class="fas fa-search"></span> Arama Yap
+                        </button>
+
+                        <button class="btn btn-outline-success m-1" @onclick="goCreateUserPage"><span class="fas fa-user-plus"></span> Yeni Servis Kaydı Oluştur</button>
+                        @*<AddNewButtonComponent Caption="Create Order" OnClick="GoCreateOrder" />*@
+                    </div>
+                </div>
         </EditForm>
     </div>
 </div>
 
-<div class="btn-group">
-    <div class="container">
-        <button class="btn btn-primary m-1" @onclick="goCreateUserPage"><span class="fas fa-user-plus"></span> Yeni Servis Kaydı Oluştur</button>
-    </div>
-</div>
 <br />
 
 <Table @ref="table" Bordered=@true Size=@TableSize.Small
@@ -56,8 +86,8 @@
        OnChange="OnChange">
     <Selection Key="@(context.Id.ToString())" />
     <Column Ellipsis Title="Id" Field="@context.Id" Width="40px" />
-    <Column Title="Eklenme Tarihi" Field="@context.CreateDate" Format="yyyy-MM-dd" />
-    <Column  Title="Adı Soyadı" Field="@context.Customer?.FullName" />
+    <Column Title="Eklenme Tarihi" Field="@context.CreateDate" Format="yyyy-MM-dd" Ellipsis />
+    <Column  Title="Adı Soyadı" Field="@context.Customer?.FullName" Ellipsis />
     <Column  Title="Servis" Field="@context.Service?.Name" Ellipsis />
     <ActionColumn Title="Durum" Width="90px">
         <Space>
