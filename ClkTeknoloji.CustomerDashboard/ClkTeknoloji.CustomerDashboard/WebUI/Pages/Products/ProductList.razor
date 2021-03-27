@@ -1,62 +1,42 @@
 ﻿@page "/productslist"
+@using AntDesign.TableModels
+@using System.Text.Json;
 
-<h3>Kayıtlı Ürün Listesi</h3>
+<h3>Teknik Servisde Kayıtlı Ürün Listesi</h3>
 
 <div class="btn-group">
     <div class="container">
-        <button class="btn btn-primary" @onclick="goCreateUserPage">Yeni Kayıt Oluştur</button>
+        <button class="btn btn-primary m-1" @onclick="goCreateUserPage"><span class="fas fa-user-plus"></span> Yeni Servis Kaydı Oluştur</button>
     </div>
 </div>
 <br />
-@if (productsList != null)
-{
-    <div class="container">
-        <div class="row">
-            <table class="table table-hover table-sm table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Eklenme Tarihi</th>
-                        <th scope="col">Ekleyen Personel</th>
-                        <th scope="col">Müşteri Id</th>
-                        <th scope="col">Servis Id</th>
-                        <th scope="col">Durum</th>
-                        <th scope="col">Tipi</th>
-                        <th scope="col">Bilgi</th>
-                        <th scope="col">Alınan Parçalar</th>
-                        <th scope="col">Fiyat</th>
 
-                        <th scope="col">#</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in productsList)
-                    {
-                    <tr>
-                        <td>@user.Id</td>
-                        <td>@user.CreateDate.ToShortDateString()</td>
-                        <td>@user.CreatedUserId</td>
-                        <td>@user.Customer.FirstName</td>
-                        <td>@user.Service.Name</td>
-                        <td>@user.Statu</td>
-                        <td>@user.Type</td>
-                        <td>@user.Information</td>
-                        <td>@user.PartOfProduct</td>
-                        <td>@user.Price</td>
+<Table @ref="table" Bordered=@true Size=@TableSize.Small
+       TItem="ProductDto"
+       DataSource="@productsList"
+       Total="_total"
+       @bind-PageIndex="_pageIndex"
+       @bind-PageSize="_pageSize"
+       @bind-SelectedRows="selectedRows"
+       OnChange="OnChange">
+    <Selection Key="@(context.Id.ToString())" />
+    <Column Ellipsis Title="Id" Field="@context.Id" Width="40px" />
+    <Column Title="Eklenme Tarihi" Field="@context.CreateDate" Format="yyyy-MM-dd" />
+    <Column TData="string" Title="Adı Soyadı" Field="@context.Customer?.FullName" />
+    <Column TData="string" Title="Servis" Field="@context.Service?.Name" Ellipsis />
+    <Column  Title="Ücreti" Field="@context.Price" />
 
-                        @*<td><span class="@spanClass">@(user.IsActive?"Active":"Passive")</span></td>*@
-                        <td>
-                            <button class="btn btn-danger" @onclick="@(()=>DeleteUser(user.Id))">Sil</button>
-                            <button class="btn btn-success" @onclick="(() => goUpdatePage(user.Id))">Güncelle</button>
-                        </td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-    
-}
+    <ActionColumn Title="#">
+        <Space Size="small">
+            <SpaceItem>
+                <button class="btn btn-danger btn-sm" @onclick="@(()=>DeleteProduct(context.Id))"><span class="fas fa-trash"></span></button>
+                <button class="btn btn-success btn-sm" @onclick="(() => goUpdatePage(context.Id))"><span class="fas fa-pen"></span></button>
+            </SpaceItem>
+        </Space>
+    </ActionColumn>
+</Table>
+<br />
+<p>PageIndex: @_pageIndex | PageSize: @_pageSize | Total: @_total</p>
 
 @code {
     [Inject] public HttpClient HttpClient { get; set; }
@@ -66,6 +46,16 @@
     [Inject] NavigationManager navigationManager { get; set; }
 
     public List<ProductDto> productsList = new List<ProductDto>();
+
+    [Inject] ModalManager modalManager { get; set; }
+
+    IEnumerable<ProductDto> selectedRows;
+    ITable table;
+
+    int _pageIndex = 1;
+    int _pageSize = 10;
+    int _total = 0;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,10 +74,33 @@
         productsList = (await productService.GetAllProduct()).ToList();
 
     }
-    protected async Task DeleteUser(int Id)
+    protected async Task DeleteProduct(int Id)
     {
+
+        bool confirmed = await modalManager.ConfirmationAsync("Uyarı!", "Bu kaydı silmek istediğinizden emin misiniz?");
+        if (!confirmed) return;
 
         await productService.DeleteProductById(Id);
         await LoadList();
+    }
+
+    public async Task OnChange(QueryModel<ProductDto> queryModel)
+    {
+        // forecasts = await GetForecastAsync(queryModel.PageIndex, queryModel.PageSize);
+        _total = 2;
+        Console.WriteLine(JsonSerializer.Serialize(queryModel));
+    }
+
+
+    public void RemoveSelection(int id)
+    {
+        var selected = selectedRows.Where(x => x.Id != id);
+        selectedRows = selected;
+    }
+
+    private void Delete(int id)
+    {
+        // forecasts = forecasts.Where(x => x.Id != id).ToArray();
+        // _total = forecasts.Length;
     }
 }
