@@ -27,8 +27,8 @@ namespace ClkTeknoloji.CustomerDashboard
                     // Adds web-specific services such as NavigationManager
                     services.AddBlazorHybrid();
 
-
-                    var apiUri = "https://kizildag.developcu.com/"; //Buraya ip adresi girilmeli
+                    services.AddBlazoredModal();
+                    var apiUri = "http://cb250e7aa52d.ngrok.io/"; //Buraya ip adresi girilmeli
                     services.AddScoped(sp =>
                     {
                         var client = new HttpClient

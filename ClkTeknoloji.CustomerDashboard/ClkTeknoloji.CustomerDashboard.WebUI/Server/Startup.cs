@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Blazored.Modal;
 using ClkTeknoloji.CustomerDashboard.WebUI.Server.Hubs;
 using ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Infasture;
 using ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services;
@@ -14,7 +15,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Text;
-
 namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
 {
     public class Startup
@@ -30,6 +30,8 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddBlazoredModal();
+
             services.AddSignalR();
 
             services.AddAutoMapper(typeof(Startup));
@@ -76,6 +78,7 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server
 
             services.AddControllersWithViews().AddNewtonsoftJson(opt=> opt.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddRazorPages();
+
 
             services.AddResponseCompression(opts =>
             {

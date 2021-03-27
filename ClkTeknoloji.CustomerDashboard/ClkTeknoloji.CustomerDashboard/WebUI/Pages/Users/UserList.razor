@@ -11,7 +11,7 @@
     </div>
 </div>
 <br />
-@if (usersList != null)
+@*@if (usersList != null)
 {
     <table class="table table-hover table-sm">
         <thead>
@@ -42,28 +42,33 @@
             }
         </tbody>
     </table>
-}
+}*@
 
 <Table @ref="table"
-       TItem="WeatherForecast"
-       DataSource="@forecasts"
+       TItem="UserDto"
+       DataSource="@usersList"
        Total="_total"
        @bind-PageIndex="_pageIndex"
        @bind-PageSize="_pageSize"
        @bind-SelectedRows="selectedRows"
        OnChange="OnChange">
     <Selection Key="@(context.Id.ToString())" />
-    <Column @bind-Field="@context.Id" Sortable />
-    <Column @bind-Field="@context.Date" Format="yyyy-MM-dd" Sortable />
-    <Column @bind-Field="@context.TemperatureC" Sortable />
-    <Column Title="Temp. (F)" Field="@context.TemperatureF" />
-    <Column Title="Hot" Field="@context.Hot">
-        @*<Switch @bind-Value="@context.Hot"></Switch>*@
+    <Column  Ellipsis  @bind-Field="@context.Id" Sortable />
+    <Column Ellipsis @bind-Field="@context.CreateDate" Format="yyyy-MM-dd" Sortable />
+    <Column Ellipsis @bind-Field="@context.EMailAddress" Sortable />
+    <Column Ellipsis Title="Durum" Field="@(context.IsActive?"Aktif":"Pasif")">
     </Column>
-    <Column @bind-Field="@context.Summary" Sortable />
+    @*<Column @bind-Field="@context.Summary" Sortable />*@
     <ActionColumn>
-        <Space>
+        <Space Size="middle">
             @*<SpaceItem><Button Danger OnClick="()=>Delete(context.Id)">Delete</Button></SpaceItem>*@
+            <SpaceItem>
+                <button class="btn btn-danger" @onclick="@(()=>DeleteUser(context.Id))">Sil</button>
+            </SpaceItem>
+            <SpaceItem>
+                <button class="btn btn-success" @onclick="(() => goUpdatePage(context.Id))">Güncelle</button>
+
+            </SpaceItem>
         </Space>
     </ActionColumn>
 </Table>
@@ -79,9 +84,7 @@
 
     public List<UserDto> usersList = new List<UserDto>();
 
-    WeatherForecast[] forecasts;
-
-    IEnumerable<WeatherForecast> selectedRows;
+    IEnumerable<UserDto> selectedRows;
     ITable table;
 
     int _pageIndex = 1;
@@ -92,7 +95,6 @@
     {
         await LoadList();
 
-        forecasts = await GetForecastAsync(_pageIndex, _pageSize);
         _total = 50;
     }
     protected void goCreateUserPage()
@@ -110,58 +112,19 @@
     }
     protected async Task DeleteUser(int Id)
     {
-
         await userService.DeleteUserById(Id);
         await LoadList();
     }
 
-    public class WeatherForecast
+
+    public async Task OnChange(QueryModel<UserDto> queryModel)
     {
-        public int Id { get; set; }
-
-        [DisplayName("Date")]
-        public DateTime? Date { get; set; }
-
-        [DisplayName("Temp. (C)")]
-        public int TemperatureC { get; set; }
-
-        [DisplayName("Summary")]
-        public string Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-        public bool Hot { get; set; }
-    }
-
-    private static readonly string[] Summaries = new[]
- {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    public async Task OnChange(QueryModel<WeatherForecast> queryModel)
-    {
-        forecasts = await GetForecastAsync(queryModel.PageIndex, queryModel.PageSize);
+       // forecasts = await GetForecastAsync(queryModel.PageIndex, queryModel.PageSize);
         _total = 50;
         Console.WriteLine(JsonSerializer.Serialize(queryModel));
     }
 
-    public Task<WeatherForecast[]> GetForecastAsync(int pageIndex, int pageSize)
-    {
-        var rng = new Random();
-        return Task.FromResult(Enumerable.Range((pageIndex - 1) * pageSize + 1, pageSize).Select(index =>
-        {
-            var temperatureC = rng.Next(-20, 55);
-            return new WeatherForecast
-            {
-                Id = index,
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = temperatureC,
-                Summary = Summaries[rng.Next(Summaries.Length)],
-                Hot = temperatureC > 30,
-            };
-        }).ToArray());
-    }
-
+ 
     public void RemoveSelection(int id)
     {
         var selected = selectedRows.Where(x => x.Id != id);
@@ -170,7 +133,7 @@
 
     private void Delete(int id)
     {
-        forecasts = forecasts.Where(x => x.Id != id).ToArray();
-        _total = forecasts.Length;
+       // forecasts = forecasts.Where(x => x.Id != id).ToArray();
+       // _total = forecasts.Length;
     }
 }

@@ -3,3 +3,9 @@
 <h1>Merhaba, CLK personeli</h1>
 
 Sistemi kullanabilmek için öncelikle sol taraftaki menülerden takip kaydı oluşturmalısın.
+
+<button @onclick="@(() => Modal.Show<EditOrInsertUser>("My Movies"))" class="btn btn-primary">View Movies</button>
+
+@code {
+    [CascadingParameter] public IModalService Modal { get; set; }
+}

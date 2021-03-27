@@ -24,6 +24,7 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Client
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<ClkTeknoloji.CustomerDashboard.WebUI.App>("app");
+            builder.Services.AddBlazoredModal();
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddBlazoredModal();
