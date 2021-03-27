@@ -1,47 +1,83 @@
 ﻿@page "/customerslist"
-
+@using AntDesign.TableModels
+@using System.Text.Json;
 <h3>Müşteri Listesi</h3>
 
 <div class="btn-group">
     <div class="container">
-        <button class="btn btn-primary" @onclick="goCreateCustomerPage">Yeni Müşteri Oluştur</button>
+        <button class="btn btn-primary m-1" @onclick="goCreateCustomerPage"><span class="fas fa-user-plus"></span> Yeni Müşteri Oluştur</button>
     </div>
 </div>
 <br />
-@if (customersList != null)
-{
-    <table class="table table-hover table-sm">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Adı Soyadı</th>
-                <th scope="col">Telefon Numarası</th>
-                <th scope="col">Oluşturulma Tarihi</th>
-                <th scope="col">Adres</th>
-                <th scope="col">Müşterinin Kayıtlı Ürünleri</th>
-                <th scope="col">#</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var customer in customersList)
-            {
-            <tr>
-                <td>@customer.Id</td>
-                <td>@customer.FirstName @customer.LastName</td>
-                <td>@customer.PhoneNumber</td>
-                <td>@customer.CreateDate</td>
-                <td>@customer.Address</td>
-                <td>@customer.Products.Count()</td>
+@*@if (customersList != null)
+    {
+        <table class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Adı Soyadı</th>
+                    <th scope="col">Telefon Numarası</th>
+                    <th scope="col">Oluşturulma Tarihi</th>
+                    <th scope="col">Adres</th>
+                    <th scope="col">Müşterinin Kayıtlı Ürünleri</th>
+                    <th scope="col">#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in customersList)
+                {
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>@customer.FirstName @customer.LastName</td>
+                    <td>@customer.PhoneNumber</td>
+                    <td>@customer.CreateDate</td>
+                    <td>@customer.Address</td>
+                    <td>@customer.Products.Count()</td>
 
-                <td>
-                    <button class="btn btn-danger" @onclick="@(()=>DeleteCustomer(customer.Id))">Sil</button>
-                    <button class="btn btn-success" @onclick="(() => goUpdatePage(customer.Id))">Güncelle</button>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-}
+                    <td>
+                        <button class="btn btn-danger" @onclick="@(()=>DeleteCustomer(customer.Id))">Sil</button>
+                        <button class="btn btn-success" @onclick="(() => goUpdatePage(customer.Id))">Güncelle</button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    }*@
+
+
+<Table @ref="table" Bordered=@true Size=@TableSize.Small
+       TItem="CustomerDto"
+       DataSource="@customersList"
+       Total="_total"
+       @bind-PageIndex="_pageIndex"
+       @bind-PageSize="_pageSize"
+       @bind-SelectedRows="selectedRows"
+       OnChange="OnChange">
+    <Selection Key="@(context.Id.ToString())" />
+    <Column Ellipsis Title="Id" @bind-Field="@context.Id" Width="40px" />
+    <Column Title="Eklenme Tarihi" @bind-Field="@context.CreateDate" Format="yyyy-MM-dd" />
+    <Column TData="string" Title="Adı Soyadı" Field="@context.FullName" />
+    <Column TData="string" Title="Adres" @bind-Field="@context.Address" Ellipsis />
+    <Column TData="string" Title="Telefon" @bind-Field="@context.PhoneNumber" />
+    <Column  Title="Kayıtlı Cihaz Sayısı" Field="@context.Products?.Count()" />
+    @*<ActionColumn Title="Durum" Width="70px">
+            <Space>
+                <SpaceItem>
+                    <span class="badge badge-pill badge-@(context.IsActive?"success":"danger")">@(context.IsActive?"Aktif":"Pasif")</span>
+                </SpaceItem>
+            </Space>
+        </ActionColumn>*@
+    <ActionColumn Title="#">
+        <Space Size="small">
+            <SpaceItem>
+                <button class="btn btn-danger btn-sm" @onclick="@(()=>DeleteCustomer(context.Id))"><span class="fas fa-trash"></span></button>
+                <button class="btn btn-success btn-sm" @onclick="(() => goUpdatePage(context.Id))"><span class="fas fa-pen"></span></button>
+            </SpaceItem>
+        </Space>
+    </ActionColumn>
+</Table>
+<br />
+<p>PageIndex: @_pageIndex | PageSize: @_pageSize | Total: @_total</p>
 
 @code {
     [Inject] public HttpClient HttpClient { get; set; }
@@ -51,6 +87,13 @@
     [Inject] NavigationManager navigationManager { get; set; }
 
     public List<CustomerDto> customersList = new List<CustomerDto>();
+
+    IEnumerable<CustomerDto> selectedRows;
+    ITable table;
+
+    int _pageIndex = 1;
+    int _pageSize = 10;
+    int _total = 0;
 
     protected override async Task OnInitializedAsync()
     {
@@ -74,5 +117,25 @@
 
         await customerService.DeleteCustomerById(Id);
         await LoadList();
+    }
+
+    public async Task OnChange(QueryModel<CustomerDto> queryModel)
+    {
+        // forecasts = await GetForecastAsync(queryModel.PageIndex, queryModel.PageSize);
+        _total = 2;
+        Console.WriteLine(JsonSerializer.Serialize(queryModel));
+    }
+
+
+    public void RemoveSelection(int id)
+    {
+        var selected = selectedRows.Where(x => x.Id != id);
+        selectedRows = selected;
+    }
+
+    private void Delete(int id)
+    {
+        // forecasts = forecasts.Where(x => x.Id != id).ToArray();
+        // _total = forecasts.Length;
     }
 }
