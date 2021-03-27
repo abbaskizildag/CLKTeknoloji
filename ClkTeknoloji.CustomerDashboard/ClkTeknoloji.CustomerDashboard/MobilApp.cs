@@ -31,7 +31,7 @@ namespace ClkTeknoloji.CustomerDashboard
 
                     services.AddScoped<ModalManager>();
 
-                    var apiUri = "http://b6b9e1f4d953.ngrok.io"; //Buraya ip adresi girilmeli
+                    var apiUri = "http://05e05fe80725.ngrok.io"; //Buraya ip adresi girilmeli
                     services.AddScoped(sp =>
                     {
                         var client = new HttpClient

@@ -22,9 +22,16 @@
     <Selection Key="@(context.Id.ToString())" />
     <Column Ellipsis Title="Id" Field="@context.Id" Width="40px" />
     <Column Title="Eklenme Tarihi" Field="@context.CreateDate" Format="yyyy-MM-dd" />
-    <Column TData="string" Title="Adı Soyadı" Field="@context.Customer?.FullName" />
-    <Column TData="string" Title="Servis" Field="@context.Service?.Name" Ellipsis />
-    <Column  Title="Ücreti" Field="@context.Price" />
+    <Column  Title="Adı Soyadı" Field="@context.Customer?.FullName" />
+    <Column  Title="Servis" Field="@context.Service?.Name" Ellipsis />
+    <ActionColumn Title="Durum" Width="90px">
+        <Space>
+            <SpaceItem>
+                <span class="badge badge-pill  badge-@(context.Statu=="Tamamlandı"?"success":(context.Statu=="İade"?"info":"primary"))">@(context.Statu=="Tamamlandı" ? "Tamamlandı":(context.Statu=="İade"?"İade":"Yapılıyor"))</span>
+            </SpaceItem>
+        </Space>
+    </ActionColumn>
+    <Column Title="Ücreti" Field="@context.Price" />
 
     <ActionColumn Title="#">
         <Space Size="small">

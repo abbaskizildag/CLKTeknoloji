@@ -74,8 +74,18 @@ namespace ClkTeknoloji.CustomerDashboard.WebUI.Server.Services.Services
             {
                 //işlem yapılacak
             }
+            var dbService = await context.Services.Where(i => i.Id == Product.ServiceId).FirstOrDefaultAsync();
 
             dbProduct.Customer = dbCustomer;
+            dbProduct.Price = Product.Price;
+            dbProduct.Service = dbService;
+            dbProduct.ServiceId = Product.ServiceId;
+            dbProduct.Statu = Product.Statu;
+            dbProduct.Type = Product.Type;
+            dbProduct.Information = Product.Information;
+            dbProduct.PartOfProduct = Product.PartOfProduct;
+            dbProduct.ExpireDate = Product.ExpireDate;
+          
            // mapper.Map(Product, dbProduct);
             context.Products.Update(dbProduct);
             await context.SaveChangesAsync();
